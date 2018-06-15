@@ -5,10 +5,32 @@ from selenium import webdriver
 import requests
 from lxml import etree
 import sys
+import logging
 sys.path.append('./')
 from UserAgentPool import UAPool
 from ProxyPool import IPool
 
+
+# 获取logger实例，如果参数为空则返回root logger
+logger = logging.getLogger("AppName")
+
+# 指定logger输出格式
+formatter = logging.Formatter('%(asctime)s %(levelname)-8s: %(message)s')
+
+# 文件日志
+file_handler = logging.FileHandler("bf.log")
+file_handler.setFormatter(formatter)  # 可以通过setFormatter指定输出格式
+
+# 控制台日志
+console_handler = logging.StreamHandler(sys.stdout)
+console_handler.formatter = formatter  # 也可以直接给formatter赋值
+
+# 为logger添加的日志处理器
+logger.addHandler(file_handler)
+logger.addHandler(console_handler)
+
+# 指定日志的最低输出级别，默认为WARN级别
+logger.setLevel(logging.INFO)
 
 class Bfresources(object):
 
@@ -77,62 +99,62 @@ class Bfresources(object):
                     replace(" ", "")
 
             except Exception as e:
-                print(e)
+                logging.info(e)
 
             try:
                 items["contacts"] = html.xpath('//*[@class="box-rightsidebar3"]/li/a[2]/text()')[0].\
                     replace(" ", "")
             except Exception as e:
-                print(e)
+                logging.info(e)
 
             try:
                 items['phone_number'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[3]')[0].\
                     replace("\r\n\u3000\u3000电\u3000\u3000话： ", "").replace(" ", "")
 
             except Exception as e:
-                print(e)
+                logging.info(e)
 
             try:
                 items['fax'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[4]')[0].\
                     replace("\r\n\u3000\u3000传\u3000\u3000真： ", "").replace(" ", "")
             except Exception as e:
-                print(e)
+                logging.info(e)
 
             try:
                 items["mobile_number"] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[5]')[0].\
                     replace("\r\n\u3000\u3000移动电话： ", "").replace(" ", "")
             except Exception as e:
-                print(e)
+                logging.info(e)
 
             try:
                 items['address'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[6]')[0].\
                     replace("\r\n\u3000\u3000地\u3000\u3000址： ", "").replace(" ", "")
             except Exception as e:
-                print(e)
+                logging.info(e)
 
             try:
                 items['post_number'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[7]')[0].\
                     replace("\r\n\u3000\u3000邮\u3000\u3000编： ", "").replace("\r\n\u3000\u3000\u3000\u3000邮件留言：", "").\
                     replace(" ", "")
             except Exception as e:
-                print(e)
+                logging.info(e)
 
             try:
                 items['messager'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[8]')[0].\
                     replace("\r\n\u3000\u3000Messager： ", "").replace("\u3000\u3000邮件留言：", "").replace(" ", "")
             except Exception as e:
-                print(e)
+                logging.info(e)
 
             try:
                 items['bf_tong'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[9]')[0].\
                     replace("\r\n\u3000\u3000八 方 通：", "").replace("\r\n\u3000\u3000Messager：", "").replace(" ", "")
             except Exception as e:
-                print(e)
+                logging.info(e)
 
             try:
                 items['company_url'] = html.xpath('//*[@class="box-rightsidebar3"]/li/a[5]/@href')[0].replace(" ", "")
             except Exception as e:
-                print(e)
+                logging.info(e)
             return items
         else:
             self.driver.get(url)
@@ -150,7 +172,6 @@ class Bfresources(object):
             items["messager"] = ''
             items["bf_tong"] = ''
             items["company_url"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[7]').get_attribute('href')
-
             if items["company_url"] == None:
                 items["company_url"] = ''
             return items
@@ -164,7 +185,8 @@ class Bfresources(object):
         col = db.bf
         col.insert(items)
         count = col.count()
-        print("<|---------------=================-----------------|>")
+        print(items)
+        print("<|---------------=================----------------|>")
         print("当前已抓取{}条数据".format(count))
 
     def run(self):
@@ -185,11 +207,11 @@ class Bfresources(object):
                     contact_url_list.append(contact_url)
 
         for url in contact_url_list:
-            print(url)
+            logging.debug("当前抓取网页的url为：{}".format(url))
             proxy, pro = self.get_proxy()
             items = self.parse_data(url, proxy)
             time.sleep(runtime)
-            print(items)
+            logging.debug("抓取到的数据：{}".format(items))
             self.save_data(items)
 
 
