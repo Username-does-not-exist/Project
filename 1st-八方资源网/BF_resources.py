@@ -14,10 +14,9 @@ class Bfresources(object):
     八方资源网外贸服饰商家信息抓取
     """
     def __init__(self):
-
-        # self.host = '127.0.0.1'
-        # self.port = 27017
-        # self.conn = MongoClient(host=self.port, port=self.port)
+        self.host = '127.0.0.1'
+        self.port = 27017
+        self.conn = MongoClient(host=self.port, port=self.port)
         self.driver = webdriver.Chrome()
         self.base_url = "https://www.b2b168.com/k-waimaofushi/l-{}.html"
         self.headers = {
@@ -161,7 +160,12 @@ class Bfresources(object):
         数据存储
         :return:
         """
-
+        db = self.conn.BF
+        col = db.bf
+        col.insert(items)
+        count = col.count()
+        print("<|---------------=================-----------------|>")
+        print("当前已抓取{}条数据".format(count))
     def run(self):
         """
         程序运行逻辑
