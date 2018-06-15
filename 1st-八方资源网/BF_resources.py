@@ -10,7 +10,6 @@ sys.path.append('./')
 from UserAgentPool import UAPool
 from ProxyPool import IPool
 
-
 # 获取logger实例，如果参数为空则返回root logger
 logger = logging.getLogger("AppName")
 
@@ -31,6 +30,7 @@ logger.addHandler(console_handler)
 
 # 指定日志的最低输出级别，默认为WARN级别
 logger.setLevel(logging.INFO)
+
 
 class Bfresources(object):
 
