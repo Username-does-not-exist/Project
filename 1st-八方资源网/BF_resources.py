@@ -15,9 +15,9 @@ class Bfresources(object):
     """
     def __init__(self):
 
-        self.host = '127.0.0.1'
-        self.port = 27017
-        self.conn = MongoClient(host=self.port, port=self.port)
+        # self.host = '127.0.0.1'
+        # self.port = 27017
+        # self.conn = MongoClient(host=self.port, port=self.port)
         self.driver = webdriver.Chrome()
         self.base_url = "https://www.b2b168.com/k-waimaofushi/l-{}.html"
         self.headers = {
@@ -65,11 +65,11 @@ class Bfresources(object):
         获取数据
         :return:
         """
-        url_list = list()
         if "html" not in url:
+            pass
             response = requests.get(url=url, headers=self.headers, proxies=proxy)
-            if response.status_code == 200:
-                url_list.append(response.url)
+            # if response.status_code == 200:
+            #     url_list.append(response.url)
             page = response.text
             html = etree.HTML(page)
             items = dict()
@@ -134,23 +134,25 @@ class Bfresources(object):
                 items['company_url'] = html.xpath('//*[@class="box-rightsidebar3"]/li/a[5]/@href')[0].replace(" ", "")
             except Exception as e:
                 print(e)
-            print(items)
             return items
         else:
             self.driver.get(url)
             self.driver.implicitly_wait(5)
             time.sleep(3)
             items = dict()
-            items["company_name"] = self.driver.find_element_by_xpath('')
-            items["contacts"] = self.driver.find_element_by_xpath('')
-            items["phone_number"] = self.driver.find_element_by_xpath('')
-            items["fax"] = self.driver.find_element_by_xpath('')
-            items["mobile_number"] = self.driver.find_element_by_xpath('')
-            items["address"] = self.driver.find_element_by_xpath('')
-            items["post_number"] = self.driver.find_element_by_xpath('')
-            items["messager"] = self.driver.find_element_by_xpath('')
-            items["bf_tong"] = self.driver.find_element_by_xpath('')
-            items["company_url"] = self.driver.find_element_by_xpath('')
+            items["company_name"] = self.driver.find_element_by_xpath('//*[@class="Cleft"]/ul[2]').text
+            items["contacts"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[3]').text
+            items["phone_number"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[2]').text
+            items["fax"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[6]').text
+            items["mobile_number"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[4]').text
+            add = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[1]').text
+            items["address"] = add.split(' ')[-1]
+            items["post_number"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[5]').text
+            items["messager"] = ''
+            items["bf_tong"] = ''
+            items["company_url"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[7]').get_attribute('href')
+            if items["company_url"] == None:
+                items["company_url"] = ''
             return items
 
     def save_data(self, items):
