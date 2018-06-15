@@ -69,8 +69,6 @@ class Bfresources(object):
         if "html" not in url:
             pass
             response = requests.get(url=url, headers=self.headers, proxies=proxy)
-            # if response.status_code == 200:
-            #     url_list.append(response.url)
             page = response.text
             html = etree.HTML(page)
             items = dict()
