@@ -59,7 +59,7 @@ class Bfresources(object):
         detail_url_list = html.xpath('//*[@id="box02"]/div/div/ul/div/h1/a/@href')
         return detail_url_list
 
-    def parse_data(self, url, proxy, pro):
+    def parse_data(self, url, proxy):
         """
         获取数据
         :return:
@@ -166,6 +166,7 @@ class Bfresources(object):
         count = col.count()
         print("<|---------------=================-----------------|>")
         print("当前已抓取{}条数据".format(count))
+
     def run(self):
         """
         程序运行逻辑
