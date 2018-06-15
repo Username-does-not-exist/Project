@@ -151,6 +151,7 @@ class Bfresources(object):
             items["messager"] = ''
             items["bf_tong"] = ''
             items["company_url"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[7]').get_attribute('href')
+
             if items["company_url"] == None:
                 items["company_url"] = ''
             return items
@@ -171,9 +172,9 @@ class Bfresources(object):
         for url in url_list:
             detail_url_list = self.get_detail_url(url)
             for url in detail_url_list:
-                if "com" in url and "html" in url:
+                if "html" in url:
                     contact_url_list.append(url)
-                if "com" in url and "html" not in url:
+                else:
                     contact_url = url + "contact.aspx"
                     contact_url_list.append(contact_url)
 
