@@ -64,9 +64,12 @@ class Bfresources(object):
         :return:
         """
         # try:
+        url_list = list()
         if "html" not in url:
             pass
         #         # response = requests.get(url=url, headers=self.headers, proxies = proxy)
+        #             if response.status_code == 200:
+        #                 url_list.append(response.url)
         #         # page = response.text
         #         # html = etree.HTML(page)
         #         #
@@ -138,12 +141,16 @@ class Bfresources(object):
         else:
             try:
                 response = requests.get(url=url, headers=self.headers, proxies=proxy, timeout=10)
+                if response.status_code == 200:
+                    url_list.append(response.url)
                 i = 0
                 while i < 5:
                     if response.status_code != 200:
                         IPool().delete_proxy(pro)
                         proxy, pro = self.get_proxy()
                         response = requests.get(url=url, headers=self.headers, proxies=proxy, timeout=15)
+                        if response.status_code == 200:
+                            url_list.append(response.url)
                         time.sleep(0.5)
                     else:
                         break
@@ -195,7 +202,10 @@ class Bfresources(object):
                     print(e)
 
                 try:
-                    items['post_number'] = html.xpath('//*[@class="codl"]/dd[5]/text()')[0].replace(" ", "")
+                    items['post_number'] = html.xpath('//*[@class="codl"]/dd[5]/text()')#[0].replace(" ", "")
+                    if len(items['post_number']) == 0:
+                        items['post_number'] = ''
+                    print("postnumis:------------{}-------------".format(items['post_number']))
                     if items['post_number'] == None:
                         items['post_number'] = ''
                 except Exception as e:
