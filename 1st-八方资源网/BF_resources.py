@@ -1,3 +1,4 @@
+import random
 import time
 from pymongo import MongoClient
 from selenium import webdriver
@@ -10,6 +11,7 @@ from ProxyPool import IPool
 
 
 class Bfresources(object):
+
     """
     八方资源网外贸服饰商家信息抓取
     """
@@ -172,6 +174,7 @@ class Bfresources(object):
         程序运行逻辑
         :return:
         """
+        runtime = random.randint(1, 2)
         contact_url_list = list()
         url_list = self.parse_url()
         for url in url_list:
@@ -186,8 +189,8 @@ class Bfresources(object):
         for url in contact_url_list:
             print(url)
             proxy, pro = self.get_proxy()
-            items = self.parse_data(url, proxy, pro)
-            time.sleep(0.2)
+            items = self.parse_data(url, proxy)
+            time.sleep(runtime)
             print(items)
             self.save_data(items)
 
