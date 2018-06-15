@@ -11,7 +11,7 @@ from UserAgentPool import UAPool
 from ProxyPool import IPool
 
 # 获取logger实例，如果参数为空则返回root logger
-logger = logging.getLogger("AppName")
+logger = logging.getLogger("BF")
 
 # 指定logger输出格式
 formatter = logging.Formatter('%(asctime)s %(levelname)-8s: %(message)s')
@@ -40,7 +40,7 @@ class Bfresources(object):
     def __init__(self):
         self.host = '127.0.0.1'
         self.port = 27017
-        self.conn = MongoClient(host=self.port, port=self.port)
+        self.conn = MongoClient(host=self.host, port=self.port)
         self.driver = webdriver.Chrome()
         self.base_url = "https://www.b2b168.com/k-waimaofushi/l-{}.html"
         self.headers = {
@@ -83,98 +83,116 @@ class Bfresources(object):
         detail_url_list = html.xpath('//*[@id="box02"]/div/div/ul/div/h1/a/@href')
         return detail_url_list
 
-    def parse_data(self, url, proxy):
+    def parse_data(self, url, proxy, pro):
         """
         获取数据
         :return:
         """
         if "html" not in url:
-            pass
-            response = requests.get(url=url, headers=self.headers, proxies=proxy)
-            page = response.text
-            html = etree.HTML(page)
-            items = dict()
             try:
-                items["company_name"] = html.xpath('//*[@class="box-rightsidebar3"]/li/a[1]/text()')[0].\
-                    replace(" ", "")
+                response = requests.get(url=url, headers=self.headers, proxies=proxy, timeout=5)
+                i = 0
+                while i < 5:
+                    if response.status_code != 200:
+                        time.sleep(3)
+                        response = requests.get(url=url, headers=self.headers, proxies=proxy, timeout=3)
+                        i += 1
+                        if i == 4:
+                            IPool().delete_proxy(pro)
+                            proxy = IPool().get_proxy()
+                            response = requests.get(url=url, headers=self.headers, proxies=proxy, timeout=5)
+                    else:
+                        break
+                page = response.text
+                html = etree.HTML(page)
+                items = dict()
+                try:
+                    items["company_name"] = html.xpath('//*[@class="box-rightsidebar3"]/li/a[1]/text()')[0].\
+                        replace(" ", "")
 
+                except Exception as e:
+                    logging.info(e)
+
+                try:
+                    items["contacts"] = html.xpath('//*[@class="box-rightsidebar3"]/li/a[2]/text()')[0].\
+                        replace(" ", "")
+                except Exception as e:
+                    logging.info(e)
+
+                try:
+                    items['phone_number'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[3]')[0].\
+                        replace("\r\n\u3000\u3000电\u3000\u3000话： ", "").replace(" ", "")
+
+                except Exception as e:
+                    logging.info(e)
+
+                try:
+                    items['fax'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[4]')[0].\
+                        replace("\r\n\u3000\u3000传\u3000\u3000真： ", "").replace(" ", "")
+                except Exception as e:
+                    logging.info(e)
+
+                try:
+                    items["mobile_number"] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[5]')[0].\
+                        replace("\r\n\u3000\u3000移动电话： ", "").replace(" ", "")
+                except Exception as e:
+                    logging.info(e)
+
+                try:
+                    items['address'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[6]')[0].\
+                        replace("\r\n\u3000\u3000地\u3000\u3000址： ", "").replace(" ", "")
+                except Exception as e:
+                    logging.info(e)
+
+                try:
+                    items['post_number'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[7]')[0].\
+                        replace("\r\n\u3000\u3000邮\u3000\u3000编： ", "").replace("\r\n\u3000\u3000\u3000\u3000邮件留言：", "").\
+                        replace(" ", "")
+                except Exception as e:
+                    logging.info(e)
+
+                try:
+                    items['messager'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[8]')[0].\
+                        replace("\r\n\u3000\u3000Messager： ", "").replace("\u3000\u3000邮件留言：", "").replace(" ", "")
+                except Exception as e:
+                    logging.info(e)
+
+                try:
+                    items['bf_tong'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[9]')[0].\
+                        replace("\r\n\u3000\u3000八 方 通：", "").replace("\r\n\u3000\u3000Messager：", "").replace(" ", "")
+                except Exception as e:
+                    logging.info(e)
+
+                try:
+                    items['company_url'] = html.xpath('//*[@class="box-rightsidebar3"]/li/a[5]/@href')[0].replace(" ", "")
+                except Exception as e:
+                    logging.info(e)
+                return items
             except Exception as e:
-                logging.info(e)
+                logging.warning(e)
 
-            try:
-                items["contacts"] = html.xpath('//*[@class="box-rightsidebar3"]/li/a[2]/text()')[0].\
-                    replace(" ", "")
-            except Exception as e:
-                logging.info(e)
-
-            try:
-                items['phone_number'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[3]')[0].\
-                    replace("\r\n\u3000\u3000电\u3000\u3000话： ", "").replace(" ", "")
-
-            except Exception as e:
-                logging.info(e)
-
-            try:
-                items['fax'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[4]')[0].\
-                    replace("\r\n\u3000\u3000传\u3000\u3000真： ", "").replace(" ", "")
-            except Exception as e:
-                logging.info(e)
-
-            try:
-                items["mobile_number"] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[5]')[0].\
-                    replace("\r\n\u3000\u3000移动电话： ", "").replace(" ", "")
-            except Exception as e:
-                logging.info(e)
-
-            try:
-                items['address'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[6]')[0].\
-                    replace("\r\n\u3000\u3000地\u3000\u3000址： ", "").replace(" ", "")
-            except Exception as e:
-                logging.info(e)
-
-            try:
-                items['post_number'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[7]')[0].\
-                    replace("\r\n\u3000\u3000邮\u3000\u3000编： ", "").replace("\r\n\u3000\u3000\u3000\u3000邮件留言：", "").\
-                    replace(" ", "")
-            except Exception as e:
-                logging.info(e)
-
-            try:
-                items['messager'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[8]')[0].\
-                    replace("\r\n\u3000\u3000Messager： ", "").replace("\u3000\u3000邮件留言：", "").replace(" ", "")
-            except Exception as e:
-                logging.info(e)
-
-            try:
-                items['bf_tong'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[9]')[0].\
-                    replace("\r\n\u3000\u3000八 方 通：", "").replace("\r\n\u3000\u3000Messager：", "").replace(" ", "")
-            except Exception as e:
-                logging.info(e)
-
-            try:
-                items['company_url'] = html.xpath('//*[@class="box-rightsidebar3"]/li/a[5]/@href')[0].replace(" ", "")
-            except Exception as e:
-                logging.info(e)
-            return items
         else:
-            self.driver.get(url)
-            self.driver.implicitly_wait(5)
-            time.sleep(3)
-            items = dict()
-            items["company_name"] = self.driver.find_element_by_xpath('//*[@class="Cleft"]/ul[2]').text
-            items["contacts"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[3]').text
-            items["phone_number"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[2]').text
-            items["fax"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[6]').text
-            items["mobile_number"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[4]').text
-            add = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[1]').text
-            items["address"] = add.split(' ')[-1]
-            items["post_number"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[5]').text
-            items["messager"] = ''
-            items["bf_tong"] = ''
-            items["company_url"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[7]').get_attribute('href')
-            if items["company_url"] == None:
-                items["company_url"] = ''
-            return items
+            try:
+                self.driver.get(url)
+                self.driver.implicitly_wait(5)
+                time.sleep(3)
+                items = dict()
+                items["company_name"] = self.driver.find_element_by_xpath('//*[@class="Cleft"]/ul[2]').text
+                items["contacts"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[3]').text
+                items["phone_number"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[2]').text
+                items["fax"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[6]').text
+                items["mobile_number"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[4]').text
+                add = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[1]').text
+                items["address"] = add.split(' ')[-1]
+                items["post_number"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[5]').text
+                items["messager"] = ''
+                items["bf_tong"] = ''
+                items["company_url"] = self.driver.find_element_by_xpath('//*[@class="codl"]/dd[7]').get_attribute('href')
+                if items["company_url"] == None:
+                    items["company_url"] = ''
+                return items
+            except Exception as e:
+                logging.warning(e)
 
     def save_data(self, items):
         """
@@ -209,7 +227,7 @@ class Bfresources(object):
         for url in contact_url_list:
             logging.debug("当前抓取网页的url为：{}".format(url))
             proxy, pro = self.get_proxy()
-            items = self.parse_data(url, proxy)
+            items = self.parse_data(url, proxy, pro)
             time.sleep(runtime)
             logging.debug("抓取到的数据：{}".format(items))
             self.save_data(items)
