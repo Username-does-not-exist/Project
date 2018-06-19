@@ -36,7 +36,7 @@ logger.setLevel(logging.INFO)
 class Bfresources(object):
 
     """
-    八方资源网外贸服饰商家信息抓取
+    网页外贸服饰商家信息抓取
     """
     def __init__(self):
         self.host = '127.0.0.1'
