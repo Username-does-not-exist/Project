@@ -147,6 +147,7 @@ class Bfresources(object):
             print("当前已抓取{}条数据".format(count))
         except Exception as e:
             print(e)
+
     def run(self):
         """
         程序运行逻辑
