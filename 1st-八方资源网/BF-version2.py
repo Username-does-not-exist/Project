@@ -170,8 +170,7 @@ class Bfresources(object):
             items = self.parse_data(url, proxy, pro)
             time.sleep(runtime)
             logging.debug("抓取到的数据：{}".format(items))
-            print(items)
-            # self.save_data(items)
+            self.save_data(items)
 
 
 if __name__ == '__main__':
