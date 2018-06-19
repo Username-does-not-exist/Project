@@ -1,7 +1,6 @@
 import random
 import time
 from pymongo import MongoClient
-from redis import Redis
 from selenium import webdriver
 import requests
 from lxml import etree
@@ -41,9 +40,7 @@ class Bfresources(object):
     def __init__(self):
         self.host = '127.0.0.1'
         self.port = 27017
-        self.rport = 6379
         self.conn = MongoClient(host=self.host, port=self.port)
-        self.rconn = Redis(host=self.host, port=self.rport)
         self.driver = webdriver.Chrome()
         self.base_url = "https://www.b2b168.com/k-waimaofushi/l-{}.html"
         self.headers = {
@@ -93,90 +90,21 @@ class Bfresources(object):
         """
         if "html" not in url:
             try:
-                response = requests.get(url=url, headers=self.headers, proxies=proxy, timeout=5)
-                if response.status_code == 200:
-                    print(response.text)
-                    exist_url = response.url
-                    self.rconn.hset("url", exist_url, 1)
-                    IPool().delete_proxy(pro)
-                    proxy, pro = self.get_proxy()
-                    response = requests.get(url=url, headers=self.headers, proxies=proxy, timeout=5)
-                # i = 0
-                # while i < 5:
-                #     if response.status_code != 200:
-                #         time.sleep(3)
-                #         response = requests.get(url=url, headers=self.headers, proxies=proxy, timeout=5)
-                #         i += 1
-                #         if i == 4:
-                #             IPool().delete_proxy(pro)
-                #             proxy = IPool().get_proxy()
-                #             response = requests.get(url=url, headers=self.headers, proxies=proxy, timeout=5)
-                #     else:
-                #         break
-                page = response.text
-                html = etree.HTML(page)
+                self.driver.get(url)
+                self.driver.implicitly_wait(5)
+                time.sleep(3)
+                content = self.driver.find_element_by_xpath('//*[@class="box-rightsidebar3"]/li').text
+                data_list = content.split('：')
                 items = dict()
-                try:
-                    items["company_name"] = html.xpath('//*[@class="box-rightsidebar3"]/li/a[1]/text()')[0].\
-                        replace(" ", "")
-
-                except Exception as e:
-                    logging.info(e)
-
-                try:
-                    items["contacts"] = html.xpath('//*[@class="box-rightsidebar3"]/li/a[2]/text()')[0].\
-                        replace(" ", "")
-                except Exception as e:
-                    logging.info(e)
-
-                try:
-                    items['phone_number'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[3]')[0].\
-                        replace("\r\n\u3000\u3000电\u3000\u3000话： ", "").replace(" ", "")
-
-                except Exception as e:
-                    logging.info(e)
-
-                try:
-                    items['fax'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[4]')[0].\
-                        replace("\r\n\u3000\u3000传\u3000\u3000真： ", "").replace(" ", "")
-                except Exception as e:
-                    logging.info(e)
-
-                try:
-                    items["mobile_number"] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[5]')[0].\
-                        replace("\r\n\u3000\u3000移动电话： ", "").replace(" ", "")
-                except Exception as e:
-                    logging.info(e)
-
-                try:
-                    items['address'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[6]')[0].\
-                        replace("\r\n\u3000\u3000地\u3000\u3000址： ", "").replace(" ", "")
-                except Exception as e:
-                    logging.info(e)
-
-                try:
-                    items['post_number'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[7]')[0].\
-                        replace("\r\n\u3000\u3000邮\u3000\u3000编： ", "").replace("\r\n\u3000\u3000\u3000\u3000邮件留言：", "").\
-                        replace(" ", "")
-                except Exception as e:
-                    logging.info(e)
-
-                try:
-                    items['messager'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[8]')[0].\
-                        replace("\r\n\u3000\u3000Messager： ", "").replace("\u3000\u3000邮件留言：", "").replace(" ", "")
-                except Exception as e:
-                    logging.info(e)
-
-                try:
-                    items['bf_tong'] = html.xpath('//*[@class="box-rightsidebar3"]/li/text()[9]')[0].\
-                        replace("\r\n\u3000\u3000八 方 通：", "").replace("\r\n\u3000\u3000Messager：", "").replace(" ", "")
-                except Exception as e:
-                    logging.info(e)
-
-                try:
-                    items['company_url'] = html.xpath('//*[@class="box-rightsidebar3"]/li/a[5]/@href')[0].replace(" ", "")
-                except Exception as e:
-                    logging.info(e)
+                items['company_name'] = data_list[1].split('\n')[0].replace(' ', '')
+                items['contacts'] = data_list[2].split('\n')[0].replace(' ', '')
+                items['phone_number'] = data_list[3].split('\n')[0].replace(' ', '')
+                items['post_number'] = data_list[4].split('\n')[0].replace(' ', '')
+                items['mobile_number'] = data_list[5].split('\n')[0].replace(' ', '')
+                items['address'] = data_list[6].split('\n')[0].replace(' ', '')
+                items['messager'] = data_list[7].split('\n')[0].replace(' ', '')
+                items['bf_tong'] = data_list[8].split('\n')[0].replace(' ', '')
+                items['company_url'] = data_list[10].split('\n')[0].replace(' ', '')
                 return items
             except Exception as e:
                 logging.warning(e)
@@ -242,7 +170,8 @@ class Bfresources(object):
             items = self.parse_data(url, proxy, pro)
             time.sleep(runtime)
             logging.debug("抓取到的数据：{}".format(items))
-            self.save_data(items)
+            print(items)
+            # self.save_data(items)
 
 
 if __name__ == '__main__':
