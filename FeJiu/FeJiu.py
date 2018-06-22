@@ -135,7 +135,7 @@ class FeJiu(object):
         处理数据抓取逻辑
         :return:
         """
-        runtime = random.randint(40,60)
+        runtime = random.randint(60, 120)
         while True:
             headers = self.get_headers()
             pro, proxy = self.get_proxy()
