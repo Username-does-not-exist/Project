@@ -81,21 +81,12 @@ class FeJiu(object):
         """
         try:
             response = requests.get(url=url, proxies=proxy, headers=headers, timeout=10)
-            print(response.status_code)
             if response.status_code == 200:
                 page = response.text
                 html = etree.HTML(page)
                 url_list = html.xpath('//*[@id="list_item"]/div[1]/div/div/div[1]/h1/a/@href')
-                next_page_url = html.xpath('//*[@id="AspNetPager1"]/a[last()-1]/@href')[0]
-                try:
-                    element = html.xpath('//*[@id="AspNetPager1"]/a[last()-1]/@disabled')[0]
-                    if element != "disabled":
-                        element = None
-                        return url_list, next_page_url, element
-                    else:
-                        return url_list, next_page_url, element
-                except Exception as e:
-                    print(e)
+                next_page_url = html.xpath('//*[@id="AspNetPager1"]/a[last()-1]/@href|//*[@id="AspNetPager1"]/a[last()-1]/@disabled')[0]
+                return url_list, next_page_url
             else:
                 pass
         except Exception as e:
@@ -158,31 +149,30 @@ class FeJiu(object):
             for url in distract_url_list:
                 try:
                     print("------------------------{}------------------------".format(url))
-                    url_list, next_page_url, element = self.parse_detail_url(url, headers, proxy)
+                    url_list, next_page_url = self.parse_detail_url(url, headers, proxy)
                     time.sleep(6)
                     for url in url_list:
                         detail_url_list.append(url)
                         print("-------------{}--------------".format(url))
-                    if element == "disabled":
+                    if next_page_url == "disabled":
                         pass
                     else:
                         # 获取下一页
                         next_page_url_List.append(next_page_url)
-                        while True:
-                            for url in next_page_url_List:
-                                try:
-                                    print("``````````````````next_page``````````````````")
-                                    url_list, next_page_url, element = self.parse_detail_url(url, headers, proxy)
-                                    time.sleep(6)
-                                    for url in url_list:
-                                        detail_url_list.append(url)
-                                        print("-------------{}--------------".format(url))
-                                    if element == "disabled":
-                                        pass
+                        for url in next_page_url_List:
+                            try:
+                                print("``````````````````next_page``````````````````")
+                                url_list, next_page_url = self.parse_detail_url(url, headers, proxy)
+                                time.sleep(6)
+                                for url in url_list:
+                                    detail_url_list.append(url)
+                                    print("-------------{}--------------".format(url))
+                                if next_page_url != "disabled":
                                     next_page_url_List.append(next_page_url)
-                                except Exception as e:
-                                    print(e)
-                            break
+                                else:
+                                    pass
+                            except Exception as e:
+                                print(e)
 
                 except Exception as e:
                     print(e)
