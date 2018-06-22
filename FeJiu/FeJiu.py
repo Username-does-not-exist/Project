@@ -1,6 +1,5 @@
 import time
 import random
-
 import redis
 import requests
 from lxml import etree
@@ -136,25 +135,20 @@ class FeJiu(object):
         处理数据抓取逻辑
         :return:
         """
-        runtime = random.randint(36, 60)
         headers = self.get_headers()
         pro, proxy = self.get_proxy()
         try:
             distract_url_list = self.get_distract_url(headers, proxy)
-
-            detail_url_list = list()
             next_page_url_List = list()
-            print(distract_url_list)
             # 获取每一个省份的各个商家的详情页url
-            for i in range(0, len(distract_url_list)-1):
-                url = distract_url_list[i]
+            for url in distract_url_list:
                 print("=============================================^==================================================")
                 try:
                     print("------------------------{}------------------------".format(url))
                     url_list, next_page_url = self.parse_detail_url(url, headers, proxy)
                     time.sleep(6)
                     for url in url_list:
-                        detail_url_list.append(url)
+                        self.save_data(url)
                         print("-------------{}--------------".format(url))
                     if next_page_url == "disabled":
                         pass
@@ -167,7 +161,7 @@ class FeJiu(object):
                                 url_list, next_page_url = self.parse_detail_url(url, headers, proxy)
                                 time.sleep(6)
                                 for url in url_list:
-                                    detail_url_list.append(url)
+                                    self.save_data(url)
                                     print("-------------{}--------------".format(url))
                                 if next_page_url != "disabled":
                                     next_page_url_List.append(next_page_url)
@@ -178,11 +172,6 @@ class FeJiu(object):
 
                 except Exception as e:
                     print(e)
-                # del distract_url_list[i]
-            # for url in distract_url_list:
-            for url in detail_url_list:
-                # data = self.parse_data(url, headers, proxy)
-                self.save_data(url)
 
         except Exception as e:
             print("***********{}**************".format(e))
