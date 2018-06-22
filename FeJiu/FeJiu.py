@@ -144,7 +144,7 @@ class FeJiu(object):
                 # 获取每一个省份的各个商家的详情页url
                 for url in distract_url_list:
                     next_page_url_List = list()
-                    print("=============================================^==================================================")
+                    print("==========================================^===============================================")
                     try:
                         print("------------------------{}------------------------".format(url))
                         url_list, next_page_url = self.parse_detail_url(url, headers, proxy)
@@ -177,7 +177,7 @@ class FeJiu(object):
                                     next_page_url_List.clear()
                                     pass
                     except Exception as e:
-                        print(e)
+                        print("---------{}-----------------------{}----------".format(url, e))
 
             except Exception as e:
                 print("***********{}**************".format(e))
