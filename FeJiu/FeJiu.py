@@ -135,46 +135,53 @@ class FeJiu(object):
         处理数据抓取逻辑
         :return:
         """
-        headers = self.get_headers()
-        pro, proxy = self.get_proxy()
-        try:
-            distract_url_list = self.get_distract_url(headers, proxy)
-            next_page_url_List = list()
-            # 获取每一个省份的各个商家的详情页url
-            for url in distract_url_list:
-                print("=============================================^==================================================")
-                try:
-                    print("------------------------{}------------------------".format(url))
-                    url_list, next_page_url = self.parse_detail_url(url, headers, proxy)
-                    time.sleep(6)
-                    for url in url_list:
-                        self.save_data(url)
-                        print("-------------{}--------------".format(url))
-                    if next_page_url == "disabled":
-                        pass
-                    else:
-                        # 获取下一页
-                        next_page_url_List.append(next_page_url)
-                        for url in next_page_url_List:
-                            try:
+        runtime = random.randint(40,60)
+        while True:
+            headers = self.get_headers()
+            pro, proxy = self.get_proxy()
+            try:
+                distract_url_list = self.get_distract_url(headers, proxy)
+                # 获取每一个省份的各个商家的详情页url
+                for url in distract_url_list:
+                    next_page_url_List = list()
+                    print("=============================================^==================================================")
+                    try:
+                        print("------------------------{}------------------------".format(url))
+                        url_list, next_page_url = self.parse_detail_url(url, headers, proxy)
+                        time.sleep(6)
+                        if next_page_url == "disabled":
+                            # 保存第一页各商家详情页的url
+                            for url in url_list:
+                                print("-------------{}--------------".format(url))
+                                self.save_data(url)
+                            pass
+                        else:
+                            # 保存第一页各商家详情页的url
+                            for url in url_list:
+                                print("-------------{}--------------".format(url))
+                                self.save_data(url)
+                            next_page_url_List.append(next_page_url)
+                            for url in next_page_url_List:
+                                # 获取下一页各商家详情页的url
                                 print("``````````````````next_page``````````````````")
                                 url_list, next_page_url = self.parse_detail_url(url, headers, proxy)
                                 time.sleep(6)
-                                for url in url_list:
-                                    self.save_data(url)
-                                    print("-------------{}--------------".format(url))
                                 if next_page_url != "disabled":
                                     next_page_url_List.append(next_page_url)
+                                    for url in url_list:
+                                        self.save_data(url)
+                                        print("-------------{}--------------".format(url))
                                 else:
+                                    for url in url_list:
+                                        self.save_data(url)
+                                    next_page_url_List.clear()
                                     pass
-                            except Exception as e:
-                                print(e)
+                    except Exception as e:
+                        print(e)
 
-                except Exception as e:
-                    print(e)
-
-        except Exception as e:
-            print("***********{}**************".format(e))
+            except Exception as e:
+                print("***********{}**************".format(e))
+            time.sleep(runtime)
 
 
 if __name__ == '__main__':
