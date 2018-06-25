@@ -40,11 +40,13 @@ class WangU(object):
         return distract_url_list
 
     def get_detail_url(self):
-        b_list = self.driver.find_elements_by_xpath('//*[@class="main_le"]/div/ul/li/a')
+        print("-----------------------------------------------------------")
+        b_list = self.driver.find_elements_by_xpath('/html/body/div[7]/div[1]/div/ul/li[2]/h2/a')
+        num = self.driver.find_element_by_xpath('/html/body/div[5]/div[1]/div/span[2]/span').text
         url_list = list()
         detail_url_list = list()
-        for i in range(0,len(b_list)):
-            url = b_list[i].get_attribute('href')
+        for i in b_list:
+            url = i.get_attribute('href')
             url_list.append(url)
 
         set(url_list)
@@ -52,43 +54,65 @@ class WangU(object):
             for url in url_list:
                 detail_url = re.findall('http://\w+.fengj.com/detail/\d+/info_\d+.html', url)[0]
                 detail_url_list.append(detail_url)
-            return detail_url_list
+            return detail_url_list, num
         except Exception as e:
             print(e)
             pass
 
-    def save_url(self, url):
-        print(url)
-        self.rConn.hset('usefulurls', url, 1)
+    def save_url(self, detail_url, distract_url):
+        print(detail_url)
+        self.rConn.hset("WUrls", distract_url, 1)
+        self.rConn.hset('usefulurls', detail_url, 1)
 
     def __del__(self):
         self.driver.close()
 
     def run(self):
         runtime = random.randint(40, 60)
+        stoptime = random.randint(4, 6)
         self.driver.get(self.start_url)
         self.driver.implicitly_wait(10)
         distract_url_list = self.get_distract_url()
-        for url in distract_url_list:
-            print(url)
-            self.driver.get(url)
-            detail_url_list = self.get_detail_url()
+        for distract_url in distract_url_list:
+            self.driver.get(distract_url)
+            detail_url_list, num = self.get_detail_url()
             self.driver.implicitly_wait(10)
-            for url in detail_url_list:
-                self.save_url(url)
+            for detail_url in detail_url_list:
+                self.save_url(detail_url, distract_url)
             time.sleep(3)
             # 获取下一页
-            while True:
-                print("--------------------next_page----------------------")
-                next_page = self.driver.find_element_by_xpath('/html/body/div[7]/div[1]/div[16]/a[last()]').get_attribute('href')
-                print(next_page)
-                self.driver.get(next_page)
-                print("==========================")
-                self.driver.implicitly_wait(50)
-                detail_url_list = self.get_detail_url()
-                for url in detail_url_list:
-                    self.save_url(url)
-                time.sleep(runtime)
+            page = int(num) // 15
+            if page >= 150:
+                page = 150
+                for i in range(1, page):
+                    try:
+                        next_page_url = distract_url + "page{}/".format(i)
+                        print("...........{}............".format(next_page_url))
+                        self.driver.get(next_page_url)
+                        self.driver.implicitly_wait(10)
+                        detail_url_list, num = self.get_detail_url()
+                        for detail_url in detail_url_list:
+                            self.save_url(detail_url, distract_url)
+                        time.sleep(stoptime)
+                    except Exception as e:
+                        print(e)
+                        pass
+
+            else:
+                for i in range(1, page):
+                    try:
+                        next_page_url = distract_url + "page{}/".format(i)
+                        print("...........{}............".format(next_page_url))
+                        self.driver.get(next_page_url)
+                        self.driver.implicitly_wait(10)
+                        detail_url_list, num = self.get_detail_url()
+                        for detail_url in detail_url_list:
+                            self.save_url(detail_url, distract_url)
+                        time.sleep(stoptime)
+                    except Exception as e:
+                        print(e)
+                        pass
+            time.sleep(runtime)
 
 
 if __name__ == '__main__':

@@ -73,10 +73,6 @@ class WangU(object):
         except Exception as e:
             print(e)
 
-    def save_url(self, distract_url, detail_url):
-        self.rConn.hset("WUrls", distract_url, 1)
-        self.rConn.hset("usefulUrls", detail_url, 1)
-
     def get_detail_url(self, distract_url, proxy, pro):
         """
         获取详情页url
@@ -88,6 +84,7 @@ class WangU(object):
         try:
             response = requests.get(url=distract_url, headers=self.headers, proxies=proxy, timeout=5)
             code = response.status_code
+            print(code)
             if code == 200:
                 content = response.text
                 html = etree.HTML(content)
@@ -113,6 +110,11 @@ class WangU(object):
         except Exception as e:
             print(e)
             pass
+
+    def save_url(self, distract_url, detail_url):
+        print(detail_url)
+        self.rConn.hset("WUrls", distract_url, 1)
+        self.rConn.hset("usefulUrls", detail_url, 1)
 
     def run(self):
         # distract_url_list = list()
