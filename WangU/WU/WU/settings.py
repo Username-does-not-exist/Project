@@ -14,6 +14,9 @@ BOT_NAME = 'WU'
 SPIDER_MODULES = ['WU.spiders']
 NEWSPIDER_MODULE = 'WU.spiders'
 
+HOST = "127.0.0.1"
+PORT = 27017
+
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'WU (+http://www.yourdomain.com)'
