@@ -127,6 +127,9 @@ class FeJiu(object):
 
         self.rConn.hset("FeJuiURL", url, 1)
 
+    def save_disable_url(self, disable_url):
+        self.rConn.hset("FeJuiDisableURL", disable_url, 1)
+
     # def __del__(self):
     #     self.driver.close()
 
@@ -140,6 +143,7 @@ class FeJiu(object):
             headers = self.get_headers()
             pro, proxy = self.get_proxy()
             try:
+                disable_url_list = list()
                 distract_url_list = self.get_distract_url(headers, proxy)
                 # 获取每一个省份的各个商家的详情页url
                 for url in distract_url_list:
@@ -177,7 +181,10 @@ class FeJiu(object):
                                     next_page_url_List.clear()
                                     pass
                     except Exception as e:
-                        print("---------{}-----------------------{}----------".format(url, e))
+                        print("-----{}-------------------{}-----".format(url, e))
+                        disable_url_list.append(url)
+                    for disable_url in disable_url_list:
+                        self.save_disable_url(disable_url)
 
             except Exception as e:
                 print("***********{}**************".format(e))
