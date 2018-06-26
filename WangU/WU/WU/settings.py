@@ -73,9 +73,10 @@ DOWNLOAD_DELAY = 3
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'WU.pipelines.WuPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'WU.pipelines.WuPipeline': 300,
+   'WU.pipelines.MongoPipeline': 301
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html

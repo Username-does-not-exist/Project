@@ -9,21 +9,24 @@ from scrapy.conf import settings
 
 
 class WuPipeline(object):
+    def process_item(self, item, spider):
+        return item
+
+
+class MongoPipeline(object):
 
     def __init__(self):
         host = settings["MONGODB_HOST"]
         port = settings["MONGODB_PORT"]
-        dbname = settings["MONGODB_DBNAME"]
-        sheetname = settings["MONGODB_SHEETNAME"]
-        # 创建MONGODB数据库链接
+        db = settings["MONGODB_DBNAME"]
+        collection = settings["MONGODB_SHEETNAME"]
         client = pymongo.MongoClient(host=host, port=port)
         # 指定数据库
-        mydb = client[dbname]
+        my_db = client[db]
         # 存放数据的数据库表名
-        self.post = mydb[sheetname]
+        self.post = my_db[collection]
 
     def process_item(self, item, spider):
         data = dict(item)
         self.post.insert(data)
         yield item
-
