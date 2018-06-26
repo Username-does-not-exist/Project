@@ -10,7 +10,7 @@ class WuSpider(CrawlSpider):
     start_urls = ['http://feizhi.fengj.com/info/']
 
     rules = (
-        Rule(LinkExtractor(allow=r'http://\w+.fengj.com/detail/\d+/info_\d+.html'), callback='parse_item', follow=True),
+        Rule(LinkExtractor(allow=r'http://\w+.fengj.com/detail/\d+/info_\d+.html'), callback='parse_item', follow=False),
         Rule(LinkExtractor(allow=r'http://feizhi.fengj.com/info/paper_\w+/'), follow=True),
     )
 
