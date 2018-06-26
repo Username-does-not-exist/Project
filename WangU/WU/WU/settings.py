@@ -14,9 +14,15 @@ BOT_NAME = 'WU'
 SPIDER_MODULES = ['WU.spiders']
 NEWSPIDER_MODULE = 'WU.spiders'
 
-HOST = "127.0.0.1"
-PORT = 27017
 
+# MONGODB 主机名
+MONGODB_HOST = "127.0.0.1"
+# MONGODB 端口号
+MONGODB_PORT = 27017
+# 数据库名称
+MONGODB_DBNAME = "WangU"
+# 存放数据的表名称
+MONGODB_SHEETNAME = "wu"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'WU (+http://www.yourdomain.com)'
