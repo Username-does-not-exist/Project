@@ -11,8 +11,9 @@ class FejiuSpider(CrawlSpider):
     start_urls = ['http://www.feijiu.net/FeiZhi/a1g1/']
 
     rules = (
-        Rule(LinkExtractor(allow=r'aspx/'), callback='parse_item', follow=False),
-        Rule(LinkExtractor(allow=r'ttp://www.feijiu.net/FeiZhi/\w+/'), follow=True),
+        Rule(LinkExtractor(allow=r'contactusNews.aspx/'), callback='parse_item', follow=False),
+        Rule(LinkExtractor(allow=r'feijiu.net/'), callback='parse_item', follow=False),
+        Rule(LinkExtractor(allow=r'http://www.feijiu.net/FeiZhi/\w+/'), callback='parse_item', follow=True),
     )
 
     def parse_item(self, response):
