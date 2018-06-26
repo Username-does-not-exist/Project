@@ -18,8 +18,8 @@ class MongoPipeline(object):
     def __init__(self):
         host = settings["MONGODB_HOST"]
         port = settings["MONGODB_PORT"]
-        db = settings["MONGODB_DBNAME"]
-        collection = settings["MONGODB_SHEETNAME"]
+        db = settings["MONGODB_DB"]
+        collection = settings["MONGODB_COLLECTION"]
         client = pymongo.MongoClient(host=host, port=port)
         # 指定数据库
         my_db = client[db]
@@ -29,4 +29,5 @@ class MongoPipeline(object):
     def process_item(self, item, spider):
         data = dict(item)
         self.post.insert(data)
-        yield item
+        return item
+
