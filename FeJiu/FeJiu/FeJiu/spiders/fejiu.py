@@ -8,7 +8,7 @@ class FejiuSpider(CrawlSpider):
 
     name = 'fejiu'
     allowed_domains = ['feijiu.net']
-    start_urls = ['http://www.feijiu.net/FeiZhi/a1g1/']
+    start_urls = ['http://www.feijiu.net/FeiZhi/g1/']
 
     rules = (
         Rule(LinkExtractor(allow=r'contactusNews.aspx/'), callback='parse_item', follow=False),
