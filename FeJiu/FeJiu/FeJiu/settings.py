@@ -85,7 +85,7 @@ DOWNLOAD_DELAY = 3
 #SPIDER_MIDDLEWARES = {
 #    'FeJiu.middlewares.FejiuSpiderMiddleware': 543,
 #}
-EPTH_LIMIT = 3
+# EPTH_LIMIT = 3
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 

@@ -12,15 +12,19 @@ class FejiuSpider(CrawlSpider):
 
     rules = (
         Rule(LinkExtractor(allow=r'contactusNews.aspx/'), callback='parse_item', follow=False),
-        Rule(LinkExtractor(allow=r'feijiu.net/'), callback='parse_item', follow=False),
+        Rule(LinkExtractor(allow=r'feijiu.net/'), callback='parse_item', follow=True),
         Rule(LinkExtractor(allow=r'http://www.feijiu.net/FeiZhi/\w+/'), callback='parse_item', follow=True),
     )
 
     def parse_item(self, response):
-        items = dict()
-        items['name'] = response.xpath('//*[@class="contact"]/div/p/span/text()').extract()[0]
-        items['number'] = response.xpath('//*[@class="contact"]/div/ul/li[1]/img/@src').extract()[0]
-        items['business'] = response.xpath('//*[@id="content"]/div[1]/div[1]/div[2]/ul/li[3]/text()').extract()[0]
-        items['distract'] = response.xpath('//*[@class="contact"]/div/ul/li[4]/text()').extract()[0]
-        print(items)
-        yield items
+        try:
+            items = dict()
+            items['name'] = response.xpath('//*[@class="contact"]/div/p/span/text()').extract()[0]
+            items['number'] = response.xpath('//*[@class="contact"]/div/ul/li[1]/img/@src').extract()[0]
+            items['business'] = response.xpath('//*[@id="content"]/div[1]/div[1]/div[2]/ul/li[3]/text()').extract()[0]
+            items['distract'] = response.xpath('//*[@class="contact"]/div/ul/li[4]/text()').extract()[0]
+            print(items)
+            yield items
+
+        except Exception as e:
+            pass
