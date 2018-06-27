@@ -4,9 +4,9 @@
 # print(len(distract))
 import re
 
-a_str = "http://wse888.fengj.com/detail/39363/info_39363011.html"
+a_str = "http://bj.feijiu.net/FeiZhi/YinShuaYongZhi/FeiBaoZhi/5214745.html"
 
 
-b_str = re.findall('http://\w+.fengj.com/detail/\d+/info_\d+.html', a_str)[0]
+b_str = re.findall('html', a_str)[0]
 
 print(b_str)
