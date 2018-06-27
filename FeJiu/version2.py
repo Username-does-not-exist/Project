@@ -61,45 +61,67 @@ class FeJiu(object):
             a_str = self.driver.current_url
             a = re.findall("html", a_str)[0]
             if a == "html":
-                items = dict()
-                items['name'] = self.driver.find_element_by_xpath('//*[@class="message_right"]/p').text
-                items['number'] = self.driver.find_element_by_xpath('//*[@class="message_right"]/p/img[1]').get_attribute('src')
-                items['address'] = self.driver.find_element_by_xpath('//*[@class="message_right"]/div/span[7]').text
-                items['business'] = self.driver.find_element_by_xpath('//*[@class="dlh_message"]/p[3]').text
-
-                return items
-
-            else:
                 try:
-                    element = self.driver.find_element_by_xpath('//*[@id="nav"]/ul/li[9]/a')
-                    if element.text == "联系我们":
-                        element.click()
-                        self.driver.implicitly_wait(10)
-                        items = dict()
-                        items['name'] = self.driver.find_element_by_xpath('//*[@class="contact"]/div/p/span').text
-                        items['number'] = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li[1]/img').get_attribute('src')
-                        items['address'] = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li[4]').text
-                        items['business'] = self.driver.find_element_by_xpath('//*[@id="content"]/div[1]/div[1]/div[2]/ul/li[3]').text
-                        return items
+                    ele = self.driver.find_element_by_xpath('//*[@class="message_right"]/p').text
+                    b_str = ele.replace(' ', '')
+                    if b_str == "点此查看联系方式":
+                        pass
+                    else:
+                        while True:
+                            element = self.driver.find_element_by_class_name('dlh_message')
+                            time.sleep(1)
+                            if element.is_displayed():
+                                items = dict()
+                                items['name'] = self.driver.find_element_by_xpath('//*[@class="message_right"]/p').\
+                                text.split(':')[1].replace('\n联系电话', '')
+
+                                items['number'] = self.driver.find_element_by_xpath(
+                                    '//*[@class="message_right"]/p/img[1]').get_attribute('src')
+
+                                items['address'] = self.driver.find_element_by_xpath('//*[@class="message_right"]/div/span[7]')\
+                                .text.split('：')[1].replace(' ', '')
+
+                                items['business'] = self.driver.find_element_by_css_selector('body > div.details > div > div.expand > div.dlh > div.dlh_message > p:nth-child(4)').text
+                                return items
+
                 except:
                     pass
-
-                try:
-                    element4 = self.driver.find_element_by_xpath('//*[@id="nav"]/ul/li[5]/a')
-                    if element4.text == "联系我们":
-                        element4.click()
-                        self.driver.implicitly_wait(10)
-                        items = dict()
-                        items['name'] = self.driver.find_element_by_xpath('//*[@class="contact"]/div/p/span').text
-                        items['number'] = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li[1]/img').get_attribute('src')
-                        items['address'] = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li[4]').text
-                        items['business'] = self.driver.find_element_by_xpath('//*[@id="content"]/div[1]/div[1]/div[2]/ul/li[3]').text
-                        return items
-                except Exception as e:
-                    pass
-        except Exception as e:
-            print(e)
+            else:
+                pass
+        except:
             pass
+
+        #     else:
+        #         try:
+        #             element = self.driver.find_element_by_xpath('//*[@id="nav"]/ul/li[9]/a')
+        #             if element.text == "联系我们":
+        #                 element.click()
+        #                 self.driver.implicitly_wait(10)
+        #                 items = dict()
+        #                 items['name'] = self.driver.find_element_by_xpath('//*[@class="contact"]/div/p/span').text
+        #                 items['number'] = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li[1]/img').get_attribute('src')
+        #                 items['address'] = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li[4]').text
+        #                 items['business'] = self.driver.find_element_by_xpath('//*[@id="content"]/div[1]/div[1]/div[2]/ul/li[3]').text
+        #                 return items
+        #         except:
+        #             pass
+        #
+        #         try:
+        #             element4 = self.driver.find_element_by_xpath('//*[@id="nav"]/ul/li[5]/a')
+        #             if element4.text == "联系我们":
+        #                 element4.click()
+        #                 self.driver.implicitly_wait(10)
+        #                 items = dict()
+        #                 items['name'] = self.driver.find_element_by_xpath('//*[@class="contact"]/div/p/span').text
+        #                 items['number'] = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li[1]/img').get_attribute('src')
+        #                 items['address'] = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li[4]').text
+        #                 items['business'] = self.driver.find_element_by_xpath('//*[@id="content"]/div[1]/div[1]/div[2]/ul/li[3]').text
+        #                 return items
+        #         except Exception as e:
+        #             pass
+        # except Exception as e:
+        #     print(e)
+        #     pass
 
     def save_data(self, items):
         try:
@@ -122,26 +144,33 @@ class FeJiu(object):
             print("------------------------------------------")
             # 获取每一个省份的数据
             self.driver.get(distract_url)
-            while True:
-                detail_url_list = self.get_detail_url_list()
-                for url in detail_url_list:
-                    self.driver.get(url)
-                    items = self.parse_data()
-                    self.save_data(items)
-                    print("...........................................")
-                # 获取获取下一页
-                try:
-                    next_page = self.driver.find_element_by_xpath('//*[@id="AspNetPager1"]/a[last()-1]')
-                    next_ele = self.driver.find_element_by_xpath('//*[@id="AspNetPager1"]/a[last()-1]').get_attribute('disabled')
-                    if next_ele == "disabled":
-                        break
-                    else:
-                        next_page.click()
-                except Exception as e:
-                    print(e)
+            detail_url_list = self.get_detail_url_list()
+            for url in detail_url_list:
+                self.driver.get(url)
+                items = self.parse_data()
+                self.save_data(items)
+                print("...........................................")
+
+            # while True:
+            #     # 获取获取下一页
+            #     try:
+            #         next_page = self.driver.find_element_by_xpath('//*[@id="AspNetPager1"]/a[last()-1]')
+            #         next_ele = self.driver.find_element_by_xpath('//*[@id="AspNetPager1"]/a[last()-1]').get_attribute('disabled')
+            #         if next_ele == "disabled":
+            #             break
+            #         else:
+            #             next_page_url = next_page.get_attribute('href')
+            #             detail_url_list = self.get_detail_url_list()
+            #             for url in detail_url_list:
+            #                 self.driver.get(url)
+            #                 items = self.parse_data()
+            #                 self.save_data(items)
+            #                 print("...........................................")
+            #             self.driver.get(next_page_url)
+            #     except Exception as e:
+            #         print(e)
 
 
 if __name__ == '__main__':
     feJiu = FeJiu()
     feJiu.run()
-
