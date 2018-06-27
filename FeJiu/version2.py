@@ -1,13 +1,8 @@
 import re
 import time
-import random
 import redis
-import requests
-from lxml import etree
 from selenium import webdriver
 from pymongo import MongoClient
-from Pool.ProxyPool import IPool
-from Pool.UserAgentPool import UAPool
 
 
 class FeJiu(object):
@@ -91,38 +86,6 @@ class FeJiu(object):
         except:
             pass
 
-        #     else:
-        #         try:
-        #             element = self.driver.find_element_by_xpath('//*[@id="nav"]/ul/li[9]/a')
-        #             if element.text == "联系我们":
-        #                 element.click()
-        #                 self.driver.implicitly_wait(10)
-        #                 items = dict()
-        #                 items['name'] = self.driver.find_element_by_xpath('//*[@class="contact"]/div/p/span').text
-        #                 items['number'] = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li[1]/img').get_attribute('src')
-        #                 items['address'] = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li[4]').text
-        #                 items['business'] = self.driver.find_element_by_xpath('//*[@id="content"]/div[1]/div[1]/div[2]/ul/li[3]').text
-        #                 return items
-        #         except:
-        #             pass
-        #
-        #         try:
-        #             element4 = self.driver.find_element_by_xpath('//*[@id="nav"]/ul/li[5]/a')
-        #             if element4.text == "联系我们":
-        #                 element4.click()
-        #                 self.driver.implicitly_wait(10)
-        #                 items = dict()
-        #                 items['name'] = self.driver.find_element_by_xpath('//*[@class="contact"]/div/p/span').text
-        #                 items['number'] = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li[1]/img').get_attribute('src')
-        #                 items['address'] = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li[4]').text
-        #                 items['business'] = self.driver.find_element_by_xpath('//*[@id="content"]/div[1]/div[1]/div[2]/ul/li[3]').text
-        #                 return items
-        #         except Exception as e:
-        #             pass
-        # except Exception as e:
-        #     print(e)
-        #     pass
-
     def save_data(self, items):
         try:
             db = self.conn.FeJiu
@@ -150,25 +113,7 @@ class FeJiu(object):
                 items = self.parse_data()
                 self.save_data(items)
                 print("...........................................")
-
-            # while True:
-            #     # 获取获取下一页
-            #     try:
-            #         next_page = self.driver.find_element_by_xpath('//*[@id="AspNetPager1"]/a[last()-1]')
-            #         next_ele = self.driver.find_element_by_xpath('//*[@id="AspNetPager1"]/a[last()-1]').get_attribute('disabled')
-            #         if next_ele == "disabled":
-            #             break
-            #         else:
-            #             next_page_url = next_page.get_attribute('href')
-            #             detail_url_list = self.get_detail_url_list()
-            #             for url in detail_url_list:
-            #                 self.driver.get(url)
-            #                 items = self.parse_data()
-            #                 self.save_data(items)
-            #                 print("...........................................")
-            #             self.driver.get(next_page_url)
-            #     except Exception as e:
-            #         print(e)
+            time.sleep(5)
 
 
 if __name__ == '__main__':
