@@ -14,7 +14,6 @@ class FejiuItem(scrapy.Item):
     """
         客户姓名、电话号码、主营业务、地区
         """
-
     name = scrapy.Field()
     number = scrapy.Field()
     business = scrapy.Field()

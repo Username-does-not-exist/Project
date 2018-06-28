@@ -8,7 +8,9 @@ import random
 
 from scrapy import signals
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
-
+from scrapy.http import HtmlResponse
+from selenium.common.exceptions import TimeoutException
+import time
 
 class FejiuSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -105,7 +107,6 @@ class FejiuDownloaderMiddleware(object):
         spider.logger.info('Spider opened: %s' % spider.name)
 
 
-
 class MyUserAgentMiddleware(UserAgentMiddleware):
     '''
     随机的从User-Agent库中获取user_agent
@@ -126,3 +127,17 @@ class MyUserAgentMiddleware(UserAgentMiddleware):
         request.headers['User-Agent'] = agent
         # print(agent)
 
+
+class SeleniumMiddleware(object):
+
+    def process_request(self, request, spider):
+        if spider.name == 'fejiu':
+            try:
+                spider.browser.get(request.url)
+                spider.browser.execute_script('window.scrollTo(0, document.body.scrollHeight)')
+            except TimeoutException as e:
+                print('超时')
+                spider.browser.execute_script('window.stop()')
+            time.sleep(2)
+            return HtmlResponse(url=spider.browser.current_url, body=spider.browser.page_source,
+                                encoding="utf-8", request=request)
