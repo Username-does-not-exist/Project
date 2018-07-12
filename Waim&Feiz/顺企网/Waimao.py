@@ -30,7 +30,7 @@ return url_list
 class FeiZ(object):
 
     def __init__(self):
-        pass
+        self.base_url = "http://b2b.11467.com/search/-59168d38670d9970.htm"
 
     def get_page_url(self):
         """

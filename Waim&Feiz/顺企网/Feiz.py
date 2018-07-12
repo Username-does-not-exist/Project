@@ -9,6 +9,8 @@ http://b2b.11467.com/search/-59168d38670d9970.htm
 下一页url对应的url
 url_list = list()
 
+按城市筛选：//*[@class="boxcontent"]/dl/dd
+
 for i in range(1,21):
 url = "http://b2b.11467.com/search/-5e9f7eb8-pn{}.htm".format(i)
 url_list.append(url)
@@ -28,7 +30,7 @@ return url_list
 class FeiZ(object):
 
     def __init__(self):
-        pass
+        self.base_url = "http://b2b.11467.com/search/-5e9f7eb8.htm"
 
     def get_page_url(self):
         """
