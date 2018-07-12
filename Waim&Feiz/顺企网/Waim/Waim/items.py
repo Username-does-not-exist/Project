@@ -11,4 +11,10 @@ import scrapy
 class WaimItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
+    company = scrapy.Field()
+    contact = scrapy.Field()
+    contact_number = scrapy.Field()
+    number = scrapy.Field()
+    post = scrapy.Field()
+    fax = scrapy.Field()
+    address = scrapy.Field()
