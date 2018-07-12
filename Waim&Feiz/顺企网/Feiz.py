@@ -10,7 +10,7 @@ http://b2b.11467.com/search/-59168d38670d9970.htm
 url_list = list()
 
 for i in range(1,21):
-url = "http://b2b.11467.com/search/-5e9f7eb8-pn{}.html".format(i)
+url = "http://b2b.11467.com/search/-5e9f7eb8-pn{}.htm".format(i)
 url_list.append(url)
 return url_list
 
@@ -38,7 +38,7 @@ class FeiZ(object):
         url_list = list()
 
         for i in range(1, 21):
-            url = "http://b2b.11467.com/search/-5e9f7eb8-pn{}.html".format(i)
+            url = "http://b2b.11467.com/search/-5e9f7eb8-pn{}.htm".format(i)
             url_list.append(url)
         return url_list
 
