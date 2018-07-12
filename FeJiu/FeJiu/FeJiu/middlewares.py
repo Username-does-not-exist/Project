@@ -5,7 +5,6 @@
 # See documentation in:
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 import random
-
 from scrapy import signals
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 from scrapy.http import HtmlResponse
