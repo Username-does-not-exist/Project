@@ -37,7 +37,7 @@ from Pool.ProxyPool import IPool
 from Pool.UserAgentPool import UAPool
 
 
-class FeiZ(object):
+class Waim(object):
 
     def __init__(self):
         self.base_url = "http://b2b.11467.com/search/-59168d38670d9970.htm"
@@ -160,8 +160,8 @@ class FeiZ(object):
 
 
 if __name__ == '__main__':
-    fz = FeiZ()
-    fz.main()
+    wm = Waim()
+    wm.main()
 
 
 
