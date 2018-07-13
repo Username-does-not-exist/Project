@@ -4,9 +4,12 @@
 #
 # See documentation in:
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-
+import random
+import sys
 from scrapy import signals
-
+from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
+sys.path.append("../")
+from Pool.ProxyPool import IPool
 
 class WaimSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -101,3 +104,49 @@ class WaimDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+class MyUserAgentMiddleware(UserAgentMiddleware):
+    '''
+    随机的从User-Agent库中获取user_agent
+    发起请求
+    '''
+
+    def __init__(self, user_agent):
+        self.user_agent = user_agent
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(
+            user_agent=crawler.settings.get('MY_USER_AGENT')
+        )
+
+    def process_request(self, request, spider):
+        agent = random.choice(self.user_agent)
+        request.headers['User-Agent'] = agent
+
+
+class ProxyMiddleWare(object):
+    """docstring for ProxyMiddleWare"""
+
+    def process_request(self, request, spider):
+        '''对request对象加上proxy'''
+        proxy = self.get_random_proxy()
+        print("this is request ip:" + proxy)
+        request.meta['proxy'] = proxy
+
+    def process_response(self, request, response, spider):
+        '''对返回的response处理'''
+        # 如果返回的response状态不是200，重新生成当前request对象
+        if response.status != 200:
+            proxy = self.get_random_proxy()
+            print("this is response ip:" + proxy)
+            # 对当前reque加上代理
+            request.meta['proxy'] = proxy
+            return request
+        return response
+
+    def get_random_proxy(self):
+        proxy = IPool().get_proxy()
+        return proxy
+
