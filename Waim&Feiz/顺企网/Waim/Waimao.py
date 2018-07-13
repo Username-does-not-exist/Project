@@ -27,7 +27,6 @@ return url_list
 """
 import sys
 import time
-
 import redis
 from lxml import etree
 from pymongo import MongoClient
@@ -79,24 +78,47 @@ class FeiZ(object):
         except:
             IPool().delete_proxy(pro)
 
-    def get_detail_url(self,url,proxy,pro):
+    def get_detail_url(self, url, proxy):
+        """
+        获取详情页的url
+        :param url:
+        :param proxy:
+        :return:
+        """
         time.sleep(2)
         response = requests.get(url=url, headers=self.headers, proxies=proxy, timeout=10)
         content = response.text
-        # html = etree.HTML(content)
-        detail_url_list = list()
-        data_list = re.findall("www.11467.com/\w+/co/\w+.htm", content)
-        for data in data_list:
-            detail_url = "http://" + data
-            print(detail_url)
-            detail_url_list.append(detail_url)
-        return detail_url_list
+        urls = re.findall("http://www.11467.com/\w+/gongsi/\w+\-\d.htm", url)
+        # 判断url是否为来自next_page_url_list
+        if len(urls) != 0:
+            detail_url_list = list()
+            data_list = re.findall("www.11467.com/\w+/co/\w+.htm", content)
+            for data in data_list:
+                detail_url = "http://" + data
+                print(detail_url)
+                detail_url_list.append(detail_url)
+            return detail_url_list
+        # 不是来自next_page_url_list的url,检查是否存在多个页面，有则获取其他页面的url
+        else:
+            detail_url_list = list()
+            next_page_url_list = list()
+            data_list = re.findall("www.11467.com/\w+/co/\w+.htm", content)
+            pages = re.findall("www.11467.com/\w+/gongsi/\w+\-\d.htm", content)
+            for page in pages:
+                next_page_url = "http://" + page
+                next_page_url_list.append(next_page_url)
+            for data in data_list:
+                detail_url = "http://" + data
+                print(detail_url)
+                detail_url_list.append(detail_url)
+            return detail_url_list, next_page_url_list
 
     def parse_data(self):
         """
         数据提取
         :return:
         """
+
     def save_url(self, detail_url_list):
         """
         保存详情页的url
@@ -119,25 +141,22 @@ class FeiZ(object):
         """
         proxy, pro = self.get_porxy()
         distract_url_list = self.get_distract_url(proxy, pro)
-        try:
-            if len(distract_url_list) > 0:
-                for url in distract_url_list:
-                    print(url)
-                    detail_url_list = self.get_detail_url(url,proxy,pro)
+        if len(distract_url_list) > 0:
+            for url in distract_url_list:
+                print(url)
+                detail_url_list, next_page_url_list = self.get_detail_url(url, proxy)
+                try:
+                    # 判断是否存在下一页，如果还有下一页，则继续抓取
+                    if len(next_page_url_list) > 0:
+                        for next_page_url in next_page_url_list:
+                            detail_url_list = self.get_detail_url(next_page_url, proxy)
+                            self.save_url(detail_url_list)
+                except Exception as e:
+                    print(e)
                     self.save_url(detail_url_list)
-            else:
-                IPool().delete_proxy(pro)
-                self.main()
-        except:
+        else:
             IPool().delete_proxy(pro)
             self.main()
-
-        # while True:
-        #     url = self.rConn.hget("detail_url", 1)
-        #     self.driver.get(url)
-        #     data = self.parse_data
-        #     self.save_data(data)
-        #     self.rConn.hdel("detail_url", url)
 
 
 if __name__ == '__main__':
