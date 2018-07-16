@@ -61,6 +61,9 @@ class FeizData(object):
             item['company'] = self.driver.find_element_by_xpath('//*[@class="around"]/div[4]/a').text
             item['contact'] = self.driver.find_element_by_xpath('//*[@class="basic-info"]//tr[1]/td[1]').text
             item['contact_number'] = self.driver.find_element_by_xpath('//*[@class="basic-info"]//tr[1]/td[1]').text
+            item['phone_number'] = None
+            item['wechat'] = None
+            item['QQ'] = None
             item['address'] = self.driver.find_element_by_xpath('//*[@class="around"]/div[4]/br[1]').text
             return item
 
@@ -79,14 +82,17 @@ class FeizData(object):
         except Exception as e:
             print(e)
 
+    def __del__(self):
+        self.driver.close()
+
     def main(self):
         url_list = self.rConn.hgetall("url_88wm")
         for ur in url_list:
-            proxy, pro = self.get_porxy()
             url = ur.decode('utf-8')
             self.driver.get(url)
             self.driver.implicitly_wait(10)
             data = self.get_data()
+            # self.save_data(data)
 
 
 if __name__ == '__main__':
