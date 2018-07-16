@@ -5,7 +5,6 @@ import sys
 import time
 import random
 sys.path.append("./")
-from Pool.ProxyPool import IPool
 
 
 class Waim(object):
