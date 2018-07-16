@@ -92,6 +92,7 @@ class FeizData(object):
             self.driver.get(url)
             self.driver.implicitly_wait(10)
             data = self.get_data()
+            print(data)
             # self.save_data(data)
 
 
