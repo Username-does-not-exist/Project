@@ -37,31 +37,36 @@ class WaimData(object):
 
     def get_data(self, url, proxy):
         response = requests.get(url=url, headers=self.headers, proxies=proxy, timeout=5)
-        print(response.status_code)
-        if response.status_code != 200:
-            pass
-        elif re.findall("采集大神饶命", response.text)[0]:
-            return url
-        else:
-            page = response.text
-            print(response.url)
-            html = etree.HTML(page)
-            item = dict()
-            item['company'] = html.xpath('//*[@id="logo"]/h1/text()')[0]
-            item['contact'] = html.xpath('//*[@class="boxcontent"]/dl/dd[3]/text()')[0]
-            item['contact_number'] = html.xpath('//*[@class="boxcontent"]/dl/dd[4]/text()')[0]
-            item['phone_number'] = html.xpath('//*[@class="boxcontent"]/dl/dd[2]/text()')[0]
-            item['post_number'] = html.xpath('//*[@class="boxcontent"]/dl/dd[5]/text()')[0]
-            item['fax'] = html.xpath('//*[@class="boxcontent"]/dl/dd[6]/text()')[0]
-            item['address'] = html.xpath('//*[@class="boxcontent"]/dl/dd[1]/text()')[0]
-            return item
+        try:
+            if response.status_code != 200:
+                pass
+
+            if response.status_code == 200 and re.findall("采集大神饶命", response.text)[0]:
+                print(response.text)
+                return url
+        except:
+                page = response.text
+                print(response.url)
+                html = etree.HTML(page)
+                item = dict()
+                item['company'] = html.xpath('//*[@id="gongshang"]/div/table//tr[1]/td[2]/text()')[0]
+                item['contact'] = html.xpath('//*[@class="boxcontent"]/dl/dd[3]/text()')[0]
+                item['contact_number'] = html.xpath('//*[@class="boxcontent"]/dl/dd[4]/text()')[0]
+                item['phone_number'] = html.xpath('//*[@class="boxcontent"]/dl/dd[2]/text()')[0]
+                item['post_number'] = html.xpath('//*[@class="boxcontent"]/dl/dd[5]/text()')[0]
+                try:
+                    item['fax'] = html.xpath('//*[@class="boxcontent"]/dl/dd[6]/text()')[0]
+                except:
+                    item['fax'] = None
+                item['address'] = html.xpath('//*[@class="boxcontent"]/dl/dd[1]/text()')[0]
+                return item
 
     def save_url(self, url):
-        self.rConn.hset("re_url_fz", url, 1)
+        self.rConn.hset("re_url_wa", url, 1)
 
     def save_data(self, data):
         try:
-            db = self.conn.SunWaim
+            db = self.conn.SunWa
             col = db.sun
             col.insert(data)
             count = col.count()
@@ -78,9 +83,12 @@ class WaimData(object):
             try:
                 url = ur.decode('utf-8')
                 data = self.get_data(url, proxy)
-                if re.findall("采集大神饶命", data)[0]:
-                    self.save_url(data)
-                else:
+                try:
+                    a = re.findall("http", data)
+                    if len(a) == 0:
+                        self.save_url(data)
+                except Exception as e:
+                    print(e)
                     self.save_data(data)
             except:
                 IPool().delete_proxy(pro)
