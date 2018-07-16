@@ -11,7 +11,7 @@ from Pool.ProxyPool import IPool
 class Waim(object):
 
     def __init__(self):
-        self.driver = webdriver.Firefox()
+        self.driver = webdriver.Chrome()
         self.base_url = "http://www.huangye88.com/"
         self.Host = "127.0.0.1"
         self.Port = 27017
@@ -20,12 +20,15 @@ class Waim(object):
         self.rConn = redis.Redis(host=self.Host, port=self.rPort)
 
     def get_detail_url(self):
-        items = self.driver.find_elements_by_xpath('//*[@class="wap"]/div[@class="pro-left"]/div/a')
-        url_list = list()
-        for item in items:
-            url = item.get_attribute('href')
-            url_list.append(url)
-        return url_list
+        try:
+            items = self.driver.find_elements_by_xpath('//*[@class="wap"]/div[@class="pro-left"]/div/a')
+            url_list = list()
+            for item in items:
+                url = item.get_attribute('href')
+                url_list.append(url)
+            return url_list
+        except:
+            pass
 
     def save_url(self, detail_url_list):
         """
@@ -60,11 +63,14 @@ class Waim(object):
                 print(next_page.text)
                 break
             else:
-                next_page.click()
-                self.driver.implicitly_wait(10)
-                detail_url_list = self.get_detail_url()
-                self.save_url(detail_url_list)
-                time.sleep(t2)
+                try:
+                    next_page.click()
+                    self.driver.implicitly_wait(10)
+                    detail_url_list = self.get_detail_url()
+                    self.save_url(detail_url_list)
+                    time.sleep(t2)
+                except:
+                    pass
 
 
 if __name__ == '__main__':
