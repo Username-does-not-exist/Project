@@ -95,7 +95,6 @@ class FeizData(object):
                 pass
 
 
-
 if __name__ == '__main__':
     data = FeizData()
     data.main()
