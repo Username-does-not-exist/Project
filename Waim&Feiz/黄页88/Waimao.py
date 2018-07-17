@@ -20,7 +20,7 @@ class Waim(object):
 
     def get_detail_url(self):
         try:
-            items = self.driver.find_elements_by_xpath('//*[@class="wap"]/div[@class="pro-left"]/div/a')
+            items = self.driver.find_elements_by_xpath('//*[@class="pro-left"]//div[@class="conttext"]/p[@class="compy"]/a')
             url_list = list()
             for item in items:
                 url = item.get_attribute('href')
@@ -36,7 +36,7 @@ class Waim(object):
         :return:
         """
         for url in detail_url_list:
-            self.rConn.hset("url_88wm", url, 1)
+            self.rConn.hset("company_url_88wm", url, 1)
 
     def __del__(self):
         self.driver.close()

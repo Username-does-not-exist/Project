@@ -19,7 +19,7 @@ class Feiz(object):
         self.rConn = redis.Redis(host=self.Host, port=self.rPort)
 
     def get_detail_url(self):
-        items = self.driver.find_elements_by_xpath('//*[@class="wap"]/div[@class="pro-left"]/div/a')
+        items = self.driver.find_elements_by_xpath('//*[@class="pro-left"]//div[@class="conttext"]/p[@class="compy"]/a')
         url_list = list()
         for item in items:
             url = item.get_attribute('href')
@@ -33,7 +33,7 @@ class Feiz(object):
         :return:
         """
         for url in detail_url_list:
-            self.rConn.hset("url_88fz", url, 1)
+            self.rConn.hset("company_url_88fz", url, 1)
 
     def __del__(self):
         self.driver.close()
