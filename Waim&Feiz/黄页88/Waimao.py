@@ -61,7 +61,7 @@ class Waim(object):
         t2 = random.randint(1, 3)
         while True:
             try:
-                next_page = self.driver.find_element_by_xpath('//*[@class="pages"]/a[last()-1]}|//*[@class="samllpage"]/a[2]')
+                next_page = self.driver.find_element_by_xpath('//*[@class="pages"]/a[last()-1]|//*[@class="samllpage"]/a[2]')
                 next_page.click()
                 self.driver.implicitly_wait(20)
                 detail_url_list = self.get_detail_url()
@@ -72,7 +72,7 @@ class Waim(object):
                 print(e)
                 print("----------------------------")
                 print(self.driver.current_url)
-                break
+                pass
 
 
 if __name__ == '__main__':

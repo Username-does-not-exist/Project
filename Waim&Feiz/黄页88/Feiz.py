@@ -64,7 +64,7 @@ class Feiz(object):
                 detail_url_list = self.get_detail_url()
                 self.save_url(detail_url_list)
                 time.sleep(t2)
-                
+
             except Exception as e:
                 print(e)
                 print("----------------------------")
