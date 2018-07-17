@@ -69,8 +69,7 @@ class Feiz(object):
                 print(e)
                 print("----------------------------")
                 print(self.driver.current_url)
-                break
-
+                pass
 
 
 if __name__ == '__main__':
