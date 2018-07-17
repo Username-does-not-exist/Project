@@ -38,6 +38,7 @@ class Waim(object):
         :return:
         """
         for url in detail_url_list:
+            print(url)
             self.rConn.hset("company_url_88wm", url, 1)
 
     def __del__(self):
