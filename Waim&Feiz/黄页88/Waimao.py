@@ -10,7 +10,9 @@ sys.path.append("./")
 class Waim(object):
 
     def __init__(self):
-        self.driver = webdriver.Chrome()
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--headless')
+        self.driver = webdriver.Chrome(chrome_options=chrome_options)
         self.base_url = "http://www.huangye88.com/"
         self.Host = "127.0.0.1"
         self.Port = 27017

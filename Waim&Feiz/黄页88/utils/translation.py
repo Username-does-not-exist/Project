@@ -42,3 +42,7 @@ def translate(li, result):
 
 # a = translate(li, result)
 # print(a)
+
+# dic = {'company': '常州力马干燥科技有限公司 (营业执照已认证)', 'contact': '周经理 （实名已验证）', 'mobile': '18136711288', 'number': '0519-88968880-881', 'address': '江苏 常州 常州市天宁区东青和平工业园'}
+# a = dic['contact']
+# print(a)
