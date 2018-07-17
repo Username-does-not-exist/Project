@@ -8,7 +8,7 @@ sys.path.append('./')
 from Pool.UserAgentPool import UAPool
 
 
-class Feiz(object):
+class Waim(object):
 
     def __init__(self):
         # self.driver = webdriver.Firefox()
@@ -120,7 +120,7 @@ class Feiz(object):
         :return:
         """
         try:
-            db = self.conn.hy88_fz
+            db = self.conn.hy88_wm
             col = db.fz
             if data['contact'] == None:
                 pass
@@ -134,7 +134,7 @@ class Feiz(object):
             print(e)
 
     def main(self):
-        urls = self.rConn.hgetall('company_url_88fz')
+        urls = self.rConn.hgetall('company_url_88wm')
         for i in urls:
             try:
                 url = i.decode('utf-8')
@@ -148,8 +148,8 @@ class Feiz(object):
 
 
 if __name__ == '__main__':
-    f = Feiz()
-    f.main()
+    w = Waim()
+    w.main()
 
 
 
