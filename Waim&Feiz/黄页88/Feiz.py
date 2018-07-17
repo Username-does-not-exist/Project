@@ -58,16 +58,13 @@ class Feiz(object):
         t2 = random.randint(1, 3)
         while True:
             try:
-                next_page = self.driver.find_element_by_xpath('//*[@class="pages"]/a[last()-1]')
-                if next_page.text != "下一页":
-                    print(next_page.text)
-                    break
-                else:
-                    next_page.click()
-                    self.driver.implicitly_wait(20)
-                    detail_url_list = self.get_detail_url()
-                    self.save_url(detail_url_list)
-                    time.sleep(t2)
+                next_page = self.driver.find_element_by_xpath('//*[@class="pages"]/a[last()-1]|//*[@class="samllpage"]/a[2]')
+                next_page.click()
+                self.driver.implicitly_wait(20)
+                detail_url_list = self.get_detail_url()
+                self.save_url(detail_url_list)
+                time.sleep(t2)
+                
             except Exception as e:
                 print(e)
                 print("----------------------------")
