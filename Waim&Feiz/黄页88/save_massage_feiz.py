@@ -120,7 +120,7 @@ class Feiz(object):
         :return:
         """
         try:
-            db = self.conn.hy88_fz2
+            db = self.conn.hy88_fz3
             col = db.fz
             if data['contact'] == None:
                 pass

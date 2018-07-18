@@ -120,7 +120,7 @@ class Waim(object):
         :return:
         """
         try:
-            db = self.conn.hy88_wm2
+            db = self.conn.hy88_wm3
             col = db.fz
             if data['contact'] == None:
                 pass
