@@ -92,6 +92,9 @@ class Feiz(object):
         items['mobile'] = self.translate(massage, '移动电话')
         if items['mobile'] == None:
             items['mobile'] = self.translate(massage, "手机")
+            if items['mobile'] == None:
+                items['mobile'] = self.translate(massage, "手机号")
+
         items['number'] = self.translate(massage, '公司电话')
         if items['number'] == None:
             items['number'] = self.translate(massage, '电话')
