@@ -77,10 +77,10 @@ class Waim(object):
         :param proxy:
         :return:
         """
-        button = self.driver.find_element_by_xpath('//*[@class="meun"]/a[last()]|//*[@class="navigation"]/ul/li[last()]|//*[@class="nav"]/ul/li[last()-1]')
+        button = self.driver.find_element_by_xpath('//*[@class="meun"]/a[last()]|//*[@class="navigation"]/ul/li[last()]|//*[@class="nav"]/ul/li[last()-1]|//*[@class="vip_nav"]//li[3]')
         button.click()
         self.driver.implicitly_wait(5)
-        data_list = self.driver.find_elements_by_xpath('//*[@class="site"]/ul|//*[@class="contact-text"]|//*[@class="address"]/ul')
+        data_list = self.driver.find_elements_by_xpath('//*[@class="site"]/ul|//*[@class="contact-text"]|//*[@class="address"]/ul|//*[@class="co_Details cf"]')
         massage = list()
         for data in data_list:
             item = data.text
@@ -120,7 +120,7 @@ class Waim(object):
         :return:
         """
         try:
-            db = self.conn.hy88_wm
+            db = self.conn.hy88_wm2
             col = db.fz
             if data['contact'] == None:
                 pass
