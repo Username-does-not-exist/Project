@@ -65,13 +65,13 @@ class HY88(object):
         url_list = self.get_url()
         refer_list = self.referer()
         for (refer, url) in zip(refer_list, url_list):
-            # try:
-            headers = self.get_headers(refer)
-            company_url_list = self.get_company_url(url, headers)
-            self.save_url(company_url_list)
-            # except Exception as e:
-            #     print(e)
-            #     pass
+            try:
+                headers = self.get_headers(refer)
+                company_url_list = self.get_company_url(url, headers)
+                self.save_url(company_url_list)
+            except Exception as e:
+                print(e)
+                pass
 
 
 if __name__ == '__main__':
