@@ -106,7 +106,7 @@ class Waim(object):
             items['qq'] = self.translate(massage, "QQ咨询")
         items['fax'] = self.translate(massage, '传真')
         if items['fax'] == None:
-            items['fax'] = self.translate(massage, '传真号码')
+            items['fax'] = self.translate(massage, '公司传真')
         items['post_number'] = self.translate(massage, "邮编")
         if items['post_number'] == None:
             items['post_number'] = self.translate(massage, "公司邮编")
