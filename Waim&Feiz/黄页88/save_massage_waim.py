@@ -134,7 +134,7 @@ class Waim(object):
             print(e)
 
     def main(self):
-        urls = self.rConn.hgetall('company_url_88wm')
+        urls = self.rConn.hgetall('url_88wm')
         for i in urls:
             try:
                 url = i.decode('utf-8')

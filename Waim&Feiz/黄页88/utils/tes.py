@@ -17,14 +17,33 @@ class HY88(object):
 
     def get_url(self):
         url_list = list()
-        for i in range(3, 1442):
+        for i in range(2, 1442):
             url = self.base_url.format(i)
             url_list.append(url)
         return url_list
 
+    def get_deta_url(self):
+        header ={
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+            "Accept-Encoding": "gzip, deflate",
+            "Accept-Language": "zh-CN,zh;q=0.9",
+            "Cache-Control": "max-age=0",
+            "Connection": "keep-alive",
+            "Host": "www.huangye88.com",
+            "Referer": "http://www.huangye88.com/search.html?kw=%E5%BA%9F%E7%BA%B8&type=company",
+            "Upgrade-Insecure-Requests": "1",
+            "User-Agent": UAPool().get(),
+        }
+        url = "http://www.huangye88.com/search.html?kw=%E5%A4%96%E8%B4%B8%E6%9C%8D%E9%A5%B0&type=company"
+        response = requests.get(url=url, headers=header)
+        contant = response.text
+        html = etree.HTML(contant)
+        company_url_list = html.xpath('//*[@class="pro-right"]/p/a/@href')
+        return company_url_list
+
     def referer(self):
         refer_list = list()
-        for i in range(2, 1441):
+        for i in range(1, 1441):
             refer = self.base_refer.format(i)
             refer_list.append(refer)
         return refer_list
@@ -44,7 +63,7 @@ class HY88(object):
         return headers
 
     def get_company_url(self, url, headers):
-        response = requests.get(url=url, headers=headers)
+        response = requests.get(url=url, headers=headers, timeout=10)
         contant = response.text
         html = etree.HTML(contant)
         company_url_list = html.xpath('//*[@class="pro-right"]/p/a/@href')
@@ -63,14 +82,17 @@ class HY88(object):
     def main(self):
         url_list = self.get_url()
         refer_list = self.referer()
-        for (refer, url) in zip(refer_list, url_list):
-            try:
-                headers = self.get_headers(refer)
-                company_url_list = self.get_company_url(url, headers)
-                self.save_url(company_url_list)
-            except Exception as e:
-                print(e)
-                pass
+        # for (refer, url) in zip(refer_list, url_list):
+        #     try:
+        #         headers = self.get_headers(refer)
+        #         company_url_list = self.get_company_url(url, headers)
+        #         self.save_url(company_url_list)
+        #     except Exception as e:
+        #         print(e)
+        #         pass
+
+        company_url_list = self.get_deta_url()
+        self.save_url(company_url_list)
 
 
 if __name__ == '__main__':

@@ -134,13 +134,14 @@ class Feiz(object):
             print(e)
 
     def main(self):
-        urls = self.rConn.hgetall('company_url_88fz')
+        urls = self.rConn.hgetall('url_88fz')
         for i in urls:
             try:
                 url = i.decode('utf-8')
                 self.driver.get(url)
                 self.driver.implicitly_wait(10)
                 data = self.get_data()
+                # print(data)
                 self.save_data(data)
             except Exception as e:
                 print(e)
