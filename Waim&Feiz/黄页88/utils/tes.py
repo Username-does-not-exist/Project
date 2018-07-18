@@ -1,15 +1,14 @@
 import redis
 from lxml import etree
 from pymongo import MongoClient
-
 from Pool.UserAgentPool import UAPool
 import requests
 
 
 class HY88(object):
     def __init__(self):
-        self.base_url = "http://www.huangye88.com/search.html?kw=%E5%BA%9F%E7%BA%B8&page={}/"
-        self.base_refer = "http://www.huangye88.com/search.html?kw=%E5%BA%9F%E7%BA%B8&page={}/"
+        self.base_url = "http://www.huangye88.com/search.html?kw=%E5%A4%96%E8%B4%B8%E6%9C%8D%E9%A5%B0&type=company&page={}/"
+        self.base_refer = "http://www.huangye88.com/search.html?kw=%E5%A4%96%E8%B4%B8%E6%9C%8D%E9%A5%B0&type=company&page={}/"
         self.Host = "127.0.0.1"
         self.Port = 27017
         self.rPort = 6379
@@ -18,14 +17,14 @@ class HY88(object):
 
     def get_url(self):
         url_list = list()
-        for i in range(556, 1361):
+        for i in range(3, 1442):
             url = self.base_url.format(i)
             url_list.append(url)
         return url_list
 
     def referer(self):
         refer_list = list()
-        for i in range(555, 1360):
+        for i in range(2, 1441):
             refer = self.base_refer.format(i)
             refer_list.append(refer)
         return refer_list
@@ -48,7 +47,7 @@ class HY88(object):
         response = requests.get(url=url, headers=headers)
         contant = response.text
         html = etree.HTML(contant)
-        company_url_list = html.xpath('//*[@class="pro-left"]//div[@class="conttext"]/p[@class="compy"]/a/@href')
+        company_url_list = html.xpath('//*[@class="pro-right"]/p/a/@href')
         return company_url_list
 
     def save_url(self, company_url_list):
@@ -59,7 +58,7 @@ class HY88(object):
         """
         for url in company_url_list:
             print(url)
-            self.rConn.hset("company_url_88fz", url, 1)
+            self.rConn.hset("url_88wm", url, 1)
 
     def main(self):
         url_list = self.get_url()
