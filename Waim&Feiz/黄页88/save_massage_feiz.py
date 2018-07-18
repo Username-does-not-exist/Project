@@ -109,7 +109,7 @@ class Feiz(object):
             items['fax'] = self.translate(massage, '传真号码')
         items['post_number'] = self.translate(massage, "邮编")
         if items['post_number'] == None:
-            items['post_number'] = self.translate(massage, "邮编号码")
+            items['post_number'] = self.translate(massage, "公司邮编")
 
         return items
 
