@@ -72,49 +72,53 @@ class Waim(object):
         """
         urls = q.get()
         for i in urls:
-            url = i.decode("utf-8")
-            self.driver.get(url)
-            self.driver.implicitly_wait(10)
-            button = self.driver.find_element_by_xpath('//*[@class="meun"]/a[last()]|//*[@class="navigation"]/ul/li[last()]|//*[@class="nav"]/ul/li[last()-1]|//*[@class="vip_nav"]//li[3]')
-            button.click()
-            self.driver.implicitly_wait(5)
-            data_list = self.driver.find_elements_by_xpath('//*[@class="site"]/ul|//*[@class="contact-text"]|//*[@class="address"]/ul|//*[@class="co_Details cf"]')
-            massage = list()
-            for data in data_list:
-                item = data.text
-                massage.append(item)
+            try:
+                url = i.decode("utf-8")
+                self.driver.get(url)
+                self.driver.implicitly_wait(10)
+                button = self.driver.find_element_by_xpath('//*[@class="meun"]/a[last()]|//*[@class="navigation"]/ul/li[last()]|//*[@class="nav"]/ul/li[last()-1]|//*[@class="vip_nav"]//li[3]')
+                button.click()
+                self.driver.implicitly_wait(5)
+                data_list = self.driver.find_elements_by_xpath('//*[@class="site"]/ul|//*[@class="contact-text"]|//*[@class="address"]/ul|//*[@class="co_Details cf"]')
+                massage = list()
+                for data in data_list:
+                    item = data.text
+                    massage.append(item)
 
-            items = dict()
-            items['company'] = self.translate(massage, "公司名称")
-            items['contact'] = self.translate(massage, '联系人')
-            items['mobile'] = self.translate(massage, '移动电话')
-            if items['mobile'] == None:
-                items['mobile'] = self.translate(massage, "手机")
+                items = dict()
+                items['company'] = self.translate(massage, "公司名称")
+                items['contact'] = self.translate(massage, '联系人')
+                items['mobile'] = self.translate(massage, '移动电话')
                 if items['mobile'] == None:
-                    items['mobile'] = self.translate(massage, "手机号")
-            items['number'] = self.translate(massage, '公司电话')
-            if items['number'] == None:
-                items['number'] = self.translate(massage, '电话')
-            items['address'] = self.translate(massage, '公司地址')
-            if items['address'] == None:
-                items['address'] = self.translate(massage, '地址')
-            items['wechat'] = self.translate(massage, '微信')
-            if items['wechat'] == None:
-                items['wechat'] = self.translate(massage, '微信咨询')
-            items['qq'] = self.translate(massage, 'QQ')
-            if items['qq'] == None:
-                items['qq'] = self.translate(massage, "QQ咨询")
-            items['fax'] = self.translate(massage, '传真')
-            if items['fax'] == None:
-                items['fax'] = self.translate(massage, '公司传真')
-            items['post_number'] = self.translate(massage, "邮编")
-            if items['post_number'] == None:
-                items['post_number'] = self.translate(massage, "公司邮编")
+                    items['mobile'] = self.translate(massage, "手机")
+                    if items['mobile'] == None:
+                        items['mobile'] = self.translate(massage, "手机号")
+                items['number'] = self.translate(massage, '公司电话')
+                if items['number'] == None:
+                    items['number'] = self.translate(massage, '电话')
+                items['address'] = self.translate(massage, '公司地址')
+                if items['address'] == None:
+                    items['address'] = self.translate(massage, '地址')
+                items['wechat'] = self.translate(massage, '微信')
+                if items['wechat'] == None:
+                    items['wechat'] = self.translate(massage, '微信咨询')
+                items['qq'] = self.translate(massage, 'QQ')
+                if items['qq'] == None:
+                    items['qq'] = self.translate(massage, "QQ咨询")
+                items['fax'] = self.translate(massage, '传真')
+                if items['fax'] == None:
+                    items['fax'] = self.translate(massage, '公司传真')
+                items['post_number'] = self.translate(massage, "邮编")
+                if items['post_number'] == None:
+                    items['post_number'] = self.translate(massage, "公司邮编")
 
-            db = self.conn.hy88
-            col = db.wm
-            col.insert(items)
-            print(items)
+                db = self.conn.hy88
+                col = db.wm
+                col.insert(items)
+                print(items)
+            except Exception as e:
+                print(e)
+                pass
 
 
 if __name__ == '__main__':
