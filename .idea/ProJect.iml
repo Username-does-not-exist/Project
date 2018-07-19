@@ -5,6 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/1st-/Pool" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/1st-八方资源网/Pool" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Waim&amp;Feiz/黄页88/utils" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Waim&amp;Feiz/DB" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -13,9 +14,7 @@
     <option name="TEMPLATE_CONFIGURATION" value="Jinja2" />
     <option name="TEMPLATE_FOLDERS">
       <list>
-        <option value="$MODULE_DIR$/FeJiu" />
         <option value="$MODULE_DIR$/WangU" />
-        <option value="$MODULE_DIR$/Waim&amp;Feiz/黄页88/utils" />
       </list>
     </option>
   </component>
