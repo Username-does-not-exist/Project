@@ -22,7 +22,7 @@ class Waim(object):
 
     @classmethod
     def get_url(self, q):
-        urls = self.rConn.hgetall('url_88wm')
+        urls = self.rConn.hgetall('company_url_88wm')
         q.put(urls)
 
     @staticmethod
