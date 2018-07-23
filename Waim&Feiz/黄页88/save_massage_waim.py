@@ -61,7 +61,6 @@ class Waim(object):
             except Exception as e:
                 pass
 
-
     @classmethod
     def get_data(cls, q):
         """
