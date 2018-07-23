@@ -62,7 +62,7 @@ class Waim(object):
                 pass
 
     @classmethod
-    def get_data(cls, q):
+    def parse_data(cls, q):
         """
         获取数据
         :param url:
@@ -127,6 +127,6 @@ if __name__ == '__main__':
     wm = Waim()
     gevent.joinall([
         gevent.spawn(wm.get_url, q),
-        gevent.spawn(wm.get_data, q)
+        gevent.spawn(wm.parse_data, q)
     ])
 
