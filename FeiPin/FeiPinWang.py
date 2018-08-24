@@ -1,0 +1,11 @@
+"""
+中国废品网
+	start_url:
+	    http://www.zgfp.com/search/searchcomp.aspx?page=1&ChannelId=20&cid=0&k=&w=&e=1&d=&a=
+	xpath:
+		公司名称：//*[@id="plList"]/div/table//tr/td[3]/a/text()
+		公司联系人：//*[@id="plList"]/div/table//tr/td[4]/text()
+		公司联系电话：//*[@id="plList"]/div/table//tr/td[5]/text()
+		公司地址：//*[@id="plList"]/div/table//tr/td[2]/text()
+		公司经营范围：//*[@id="plList"]/div/table//tr/td[1]/text()
+"""
