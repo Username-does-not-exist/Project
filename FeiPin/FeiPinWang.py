@@ -1,6 +1,3 @@
-import random
-import time
-
 from pymongo import MongoClient
 import redis
 from selenium import webdriver
@@ -10,10 +7,10 @@ class FeiPinW(object):
 
     def __init__(self):
         self.base_url = "http://www.zgfp.com/search/searchcomp.aspx?page={}&ChannelId=20&cid=0&k=&w=&e=1&d=&a="
-        self.driver = webdriver.Firefox()
         # chrome_options = webdriver.ChromeOptions()
         # chrome_options.add_argument('--headless')
         # self.driver = webdriver.Chrome(chrome_options=chrome_options)
+        self.driver = webdriver.Firefox()
         self.Host = "127.0.0.1"
         self.Port = 27017
         self.rPort = 6379
@@ -56,24 +53,14 @@ class FeiPinW(object):
             db = self.conn.FeiPinW
             col = db.FP
             col.insert(data)
-            count = col.count()
-            print("<|---------------=================----------------|>")
-            print("当前已抓取{}条数据".format(count))
+            print(data)
         except Exception as e:
             print(e)
 
     def run(self):
         for i in range(1, 2342):
             url = self.base_url.format(i)
-            # t1 = time.time()
-            # runtime = random.randint(10, 20)
             self.driver.get(url)
-            # t2 = time.time()
-            # if t2 - t1 >= runtime:
-            #     print("程序暂停运行{}秒-------------------".format(runtime))
-            #     time.sleep(runtime)
-            #     t1 = 0
-            #     t1 = 0
             self.driver.implicitly_wait(6)
             data_list = self.parse_page()
             for data in data_list:
