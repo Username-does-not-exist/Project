@@ -2,11 +2,42 @@
 # for url in distract:
 #     print(url)
 # print(len(distract))
-import re
+# import re
+#
+# a_str = "http://bj.feijiu.net/FeiZhi/YinShuaYongZhi/FeiBaoZhi/5214745.html"
+#
+#
+# b_str = re.findall('html', a_str)[0]
+#
+# print(b_str)
 
-a_str = "http://bj.feijiu.net/FeiZhi/YinShuaYongZhi/FeiBaoZhi/5214745.html"
+# import builtins
+#
+# a = builtins.dir()
+# print(a)
+# import datetime
+#
+# A = datetime.datetime.utcnow().timestamp()
+#
+#
+# print(A)
+#
+# """
+# 1535929220
+# 1536017870
+#
+# """
+#
+# y = 1536017870424.8071/86400/365
+# print(y)
 
+# import datetime
+#
+# t1 = datetime.datetime.utcnow().timestamp()
+# print(int(t1))
 
-b_str = re.findall('html', a_str)[0]
-
-print(b_str)
+# """
+# 1536018956
+# 1535996221
+#
+# """
