@@ -1,3 +1,4 @@
+import re
 import time
 
 import redis
@@ -22,6 +23,7 @@ class Save(object):
 
     def login(self):
         login_url = "http://passport.bianbao.net/loginSave?isMobile=0"
+        base_url = "http://passport.bianbao.net/login?ltype=login&retUrl=http%3A%2F%2Fwww.bianbao.net%2FsdList_page5.html"
         header = {
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
             "Accept-Encoding": "gzip, deflate",
@@ -34,21 +36,25 @@ class Save(object):
         }
 
         session = requests.session()
+        result = session.get(base_url, headers=header)
+        content = result.text
+        # print(content)
+        parser = re.compile(u'<input id="imgCode" name="imgCode" type="hidden" value="(.*?)">', re.S)
+        imgCode = re.findall(parser, result.text)
+        print(imgCode)
 
-        result = session.get(login_url, headers=header)
-
-        formData = {
-            "memberDetail.wechatOpenid": "",
-            "phoneNum": "17348515927",
-            "password": "zhu741852",
-            "imgCode": "u7UP"
-        }
-
-        response = session.post(login_url, data=formData, headers=header)
-        code = response.status_code
-        if code == 200:
-            content = response.text
-            print(content)
+        # formData = {
+        #     "memberDetail.wechatOpenid": "",
+        #     "phoneNum": "17348515927",
+        #     "password": "zhu741852",
+        #     "imgCode": "u7UP"
+        # }
+        #
+        # response = session.post(login_url, data=formData, headers=header)
+        # code = response.status_code
+        # if code == 200:
+        #     content = response.text
+        #     print(content)
 
     def get_data(self):
         pass
