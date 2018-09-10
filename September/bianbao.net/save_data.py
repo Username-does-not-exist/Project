@@ -22,14 +22,6 @@ class Save(object):
 
     def login(self):
         login_url = "http://passport.bianbao.net/loginSave?isMobile=0"
-
-        formData = {
-            "memberDetail.wechatOpenid":"",
-            "iphoneNum": "17348515927",
-            "password": "zhu741852",
-            "mgCode": "u7UP"
-        }
-
         header = {
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
             "Accept-Encoding": "gzip, deflate",
@@ -42,10 +34,21 @@ class Save(object):
         }
 
         session = requests.session()
+
+        result = session.get(login_url, headers=header)
+
+        formData = {
+            "memberDetail.wechatOpenid": "",
+            "phoneNum": "17348515927",
+            "password": "zhu741852",
+            "imgCode": "u7UP"
+        }
+
         response = session.post(login_url, data=formData, headers=header)
         code = response.status_code
         if code == 200:
-            print(response.cookies)
+            content = response.text
+            print(content)
 
     def get_data(self):
         pass
