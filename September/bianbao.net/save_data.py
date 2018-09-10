@@ -40,7 +40,7 @@ class Save(object):
         content = result.text
         # print(content)
         parser = re.compile(u'<input id="imgCode" name="imgCode" type="hidden" value="(.*?)">', re.S)
-        imgCode = re.findall(parser, result.text)
+        imgCode = re.findall(parser, content)
         print(imgCode)
 
         # formData = {
