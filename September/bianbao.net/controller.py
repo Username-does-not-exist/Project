@@ -69,7 +69,6 @@ class Crawl(object):
             print("程序暂停运行100秒")
             pass
 
-
     def save_url(self, url_List):
         for url in url_List:
             try:
