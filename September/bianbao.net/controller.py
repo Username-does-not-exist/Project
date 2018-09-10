@@ -41,7 +41,7 @@ class Crawl(object):
 
     def construct(self):
         url_list = []
-        for i in range(6000, 12839):
+        for i in range(5000, 6000):
             url = "http://www.bianbao.net/sdList_page{}.html".format(i)
             url_list.append(url)
         return url_list

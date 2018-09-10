@@ -4,7 +4,8 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/1st-/Pool" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/1st-八方资源网/Pool" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Waim&amp;Feiz/黄页88/utils" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/July/Waim&amp;Feiz/黄页88/utils" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/September/Pool" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -13,7 +14,8 @@
     <option name="TEMPLATE_CONFIGURATION" value="Jinja2" />
     <option name="TEMPLATE_FOLDERS">
       <list>
-        <option value="$MODULE_DIR$/WangU" />
+        <option value="$MODULE_DIR$/June/WangU" />
+        <option value="$MODULE_DIR$/September/Pool" />
       </list>
     </option>
   </component>
