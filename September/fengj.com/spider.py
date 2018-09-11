@@ -1,3 +1,4 @@
+import re
 import time
 
 import redis
@@ -61,26 +62,26 @@ class Crawl(object):
         time.sleep(1)
         print(response.status_code)
         content = response.text
-        # print(content)
-        html = etree.HTML(content)
-        company = html.xpath('//*[@class="sellerinfo"]/a/@href')
-        print(company)
+        parser = re.compile(u"<a href='(http://\w+.fengj.com)' target='_blank' >", re.S)
+        urls = re.findall(parser, content)
+        return urls
 
-        print("______________________________________________")
-        # for node in node_list:
-        #     print(node)
+    def save_url(self, urls):
+        if len(urls) == 0:
+            pass
+        else:
+            for url in urls:
+                self.RedisClint.hset('fengj_gongqiu', url, 1)
+                print(url)
 
     def main(self):
         url_list, headers2 = self.construct()
         headers1 = self.construct_headers()
         for (url, header1, header2) in zip(url_list, headers1, headers2):
-            # print(url)
-            # print(header1)
-            # print(header2)
             node_list = self.get_data(url, header1)
             for node in node_list:
-                print(node)
-                company_url_list = self.get_company_url(node, header2)
+                urls = self.get_company_url(node, header2)
+                self.save_url(urls)
 
 
 if __name__ == '__main__':
