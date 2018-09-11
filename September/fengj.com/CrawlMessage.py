@@ -16,10 +16,10 @@ class CrawlMessage(object):
         mhost = '127.0.0.1'
         mport = 27017
         Client = MongoClient(host=mhost, port=mport)
-        self.db = Client.gongqiu
-        self.collection = self.db.gq
+        self.db = Client.gongying
+        self.collection = self.db.gy
 
-    def construct_headers(self, url):
+    def construct_headers(self):
         header = {
             "Referer": "http://linsen.fengj.com/",
             "Upgrade-Insecure-Requests": "1",
@@ -51,11 +51,11 @@ class CrawlMessage(object):
             pass
 
     def main(self):
-        url_list = self.RedisClint.hgetall('fengj_gongqiu')
+        url_list = self.RedisClint.hgetall('fengj_gongying')
         for i in url_list:
             url = i.decode("utf-8")
             contact_url = url + "/lxfs.html"
-            header = self.construct_headers(url)
+            header = self.construct_headers()
             items = self.get_data(contact_url, header)
             self.save_data(items)
 
