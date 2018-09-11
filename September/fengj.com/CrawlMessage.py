@@ -32,14 +32,19 @@ class CrawlMessage(object):
         page = response.text
         html = etree.HTML(page)
         items = dict()
-        items[''] = html.xpath('')
-        items[''] = html.xpath('')
-        items[''] = html.xpath('')
-        items[''] = html.xpath('')
+        items['company'] = html.xpath('//*[@class="person_info"]/dl[last()-1]/dd//text()')
+        items['contact'] = html.xpath('//*[@class="person_info"]/dl[1]/dd//text()')
+        items['mobile'] = html.xpath('//*[@class="phone"]/p/text()')
+        items['address'] = html.xpath('//*[@class="person_info"]/dl[last()]/dd//text()')
         return items
 
     def save_data(self, items):
-        pass
+        try:
+            self.collection.insert(items)
+            print(items)
+        except Exception as e:
+            print(e)
+            pass
 
     def main(self):
         url_list = self.RedisClint.hgetall('fengj_gongqiu')
