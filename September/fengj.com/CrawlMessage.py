@@ -28,15 +28,19 @@ class CrawlMessage(object):
         return header
 
     def get_data(self, contact_url, header):
-        response = requests.get(contact_url, headers=header)
-        page = response.text
-        html = etree.HTML(page)
-        items = dict()
-        items['company'] = html.xpath('//*[@class="person_info"]/dl[last()-1]/dd//text()')
-        items['contact'] = html.xpath('//*[@class="person_info"]/dl[1]/dd//text()')
-        items['mobile'] = html.xpath('//*[@class="phone"]/p/text()')
-        items['address'] = html.xpath('//*[@class="person_info"]/dl[last()]/dd//text()')
-        return items
+        try:
+            response = requests.get(contact_url, headers=header, timeout=10)
+            page = response.text
+            html = etree.HTML(page)
+            items = dict()
+            items['company'] = html.xpath('//*[@class="person_info"]/dl[last()-1]/dd//text()')[0]
+            items['contact'] = html.xpath('//*[@class="person_info"]/dl[1]/dd//text()')[0]
+            items['mobile'] = html.xpath('//*[@class="phone"]/p/text()')[0]
+            items['address'] = html.xpath('//*[@class="person_info"]/dl[last()]/dd//text()')[0]
+            return items
+        except Exception as e:
+            print(e)
+            pass
 
     def save_data(self, items):
         try:
