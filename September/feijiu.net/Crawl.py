@@ -10,6 +10,7 @@
 
 import os
 import json
+import random
 import time
 import redis
 import requests
@@ -154,34 +155,46 @@ class Crawl(object):
                         items.append(k)
             else:
                 items.append(j[0])
+        try:
+            contact_index = items.index('联系人')
+            address_index = items.index('公司地址')
 
-        contact_index = items.index('联系人')
-        address_index = items.index('公司地址')
+            info_dict = dict()
+            info_dict['company'] = li[0]
+            info_dict['contact'] = items[contact_index + 1]
+            info_dict['address'] = items[address_index + 1]
+            return info_dict
+        except Exception as e:
+            print(e)
+            pass
 
-        info_dict = dict()
-        info_dict['company'] = li[0]
-        info_dict['contact'] = items[contact_index + 1]
-        info_dict['address'] = items[address_index + 1]
-        return info_dict
-
-    def save_data(self, data, contact_info_picture_url):
+    def save_data(self, info_dict, contact_info_picture_url):
         """
         保存数据
         :param data:
         :param contact_info_picture_url:
         :return:
         """
-        company = data['company']
-        path = os.getcwd()
-        folder = path + "\\Image_GY"
-        if not os.path.exists(folder):
-            os.mkdir(folder)
-        if len(contact_info_picture_url) >= 1:
-            url = contact_info_picture_url[0]
-            response = requests.get(url)
-            image = Image.open(BytesIO(response.content))
-            image.save(folder + '/{}.png'.format(company))
-        self.collection.insert(data)
+        try:
+            if info_dict is not None:
+                company = info_dict['company']
+                path = os.getcwd()
+                folder = path + "\\Image_GY"
+                if not os.path.exists(folder):
+                    os.mkdir(folder)
+                if len(contact_info_picture_url) >= 1:
+                    url = contact_info_picture_url[0]
+                    response = requests.get(url)
+                    image = Image.open(BytesIO(response.content))
+                    image.save(folder + '/{}.png'.format(company))
+                self.collection.insert(info_dict)
+                print(info_dict)
+        except Exception as e:
+            print(e)
+            pass
+
+    def __del__(self):
+        self.driver.close()
 
     def main(self):
         """
@@ -201,6 +214,9 @@ class Crawl(object):
                 info_dict = self.parse_data(company_info)
                 # 保存数据
                 self.save_data(info_dict, contact_info_picture_url)
+                sTime = random.randint(2, 8)
+                time.sleep(sTime)
+                print("程序暂停运行{}秒".format(sTime))
 
 
 if __name__ == '__main__':
