@@ -89,6 +89,7 @@ class Crawl(object):
             cookies = json.load(file)
             for cookie in cookies:
                 jar.set(cookie['name'], cookie['value'])
+
         response = session.get(url, cookies=jar)
         content = response.text
         html = etree.HTML(content)
@@ -131,6 +132,11 @@ class Crawl(object):
         return company_info, contact_info_picture_url
 
     def parse_data(self, company_info):
+        """
+        对抓取到的数据进行进一步处理
+        :param company_info:
+        :return:
+        """
         li = []
         for i in company_info:
             j = i.replace('\r\n', '').replace(' ', '').replace('\u3000\u3000', '').replace('\r\n\t    ', '') \
@@ -182,14 +188,18 @@ class Crawl(object):
         处理抓取逻辑
         :return:
         """
+        # 1.模拟登陆获取cookies保存到本地
         self.login_and_cookies()
+        # 2.构建url
         url_list = self.construct_url()
         for url in url_list:
+            # 3.获取企业联系方式页面对应的url
             company_url_list = self.get_company_url(url)
             for company_url in company_url_list:
-                self.get_contact_info(company_url)
+                # 4.提取数据
                 company_info, contact_info_picture_url = self.get_contact_info(company_url)
                 info_dict = self.parse_data(company_info)
+                # 保存数据
                 self.save_data(info_dict, contact_info_picture_url)
 
 
