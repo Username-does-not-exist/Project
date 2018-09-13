@@ -5,12 +5,28 @@
 
 
 """
+import redis
+from pymongo import MongoClient
+from selenium import webdriver
+from selenium.webdriver import ActionChains
 
 
 class Crawl(object):
 
     def __init__(self):
         self.start_url = "http://www.feijiu.net/gq/s/g1p{}k%b7%cf%d6%bd/"
+        self.login_url = "http://www.feijiu.net/login.aspx"
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--headless')
+        self.driver = webdriver.Chrome(chrome_options=chrome_options)
+        self.driver = webdriver.Chrome()
+        self.Host = "127.0.0.1"
+        self.Port = 27017
+        self.rPort = 6379
+        client = MongoClient(host=self.Host, port=self.Port)
+        self.rConn = redis.Redis(host=self.Host, port=self.rPort)
+        self.db = client.FJgy
+        self.collection = self.db.gy
 
     def construct_url(self):
         url_list = []
@@ -31,7 +47,26 @@ class Crawl(object):
         处理登陆逻辑
         :return:
         """
-
+        # 登陆
+        self.driver.get(self.login_url)
+        self.driver.implicitly_wait(5)
+        # 输入账号
+        username = self.driver.find_element_by_xpath('//*[@id="txt_uname"]')
+        ActionChains(self.driver).move_to_element(username)
+        username.click()
+        username.send_keys("zhuzhu1991")
+        self.driver.implicitly_wait(10)
+        # 输入密码
+        password = self.driver.find_element_by_xpath('//*[@id="txt_pass"]')
+        ActionChains(self.driver).move_to_element(password)
+        password.send_keys('zhu741852')
+        # 点击登陆
+        login_button = self.driver.find_element_by_xpath('//*[@id="btn1"]')
+        login_button.click()
+        self.driver.implicitly_wait(5)
+        cookies = self.driver.get_cookies()
+        return cookies
+    
     def get_contact_info(self, url, cookies):
         """
         获取公司信息
@@ -53,6 +88,13 @@ class Crawl(object):
         处理抓取逻辑
         :return:
         """
+        cookies =  self.login_and_cookies()
+        url_list = self.construct_url()
+        for url in url_list:
+            company_url_list = self.get_company_url(url)
+            for company_url in company_url_list:
+                company_info, contact_info_picture = self.get_contact_info(company_url, cookies)
+                self.save_data(company_info, contact_info_picture)
 
 
 if __name__ == '__main__':
