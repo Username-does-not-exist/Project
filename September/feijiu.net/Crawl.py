@@ -74,8 +74,25 @@ class Crawl(object):
         :param url:
         :return:
         """
-        url = ""
-        return url
+        session = requests.session()
+        session.verify = False
+        session.headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.81 Safari/537.36"
+        }
+        jar = RequestsCookieJar()
+        with open('cookies.txt', 'r') as file:
+            cookies = json.load(file)
+            for cookie in cookies:
+                jar.set(cookie['name'], cookie['value'])
+        response = session.get(url, cookies=jar)
+        content = response.text
+        html = etree.HTML(content)
+        company_url_list = list()
+        url_list = html.xpaht('//*[@class="pro_lists"]/div/div/h2/a/@href')
+        for url in url_list:
+            company_url = url + "contactusNews.aspx"
+            company_url_list.append(company_url)
+        return company_url_list
 
     def get_contact_info(self, url):
         """
@@ -94,7 +111,7 @@ class Crawl(object):
             cookies = json.load(file)
             for cookie in cookies:
                 jar.set(cookie['name'], cookie['value'])
-        response = session.get(url)
+        response = session.get(url, cookies=jar)
         page = response.text
         html = etree.HTML(page)
         items = html.xpath('//*[@class="contact"]//text()')
