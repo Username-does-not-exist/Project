@@ -3,10 +3,14 @@
 
 联系方式页面url = company_url + "contactusNews.aspx"
 
+所需数据：公司名称 联系人 公司地址 联系电话
+
 
 """
 import os
 import json
+import time
+
 import redis
 import requests
 from lxml import etree
@@ -56,6 +60,7 @@ class Crawl(object):
         # 点击登陆
         login_button = self.driver.find_element_by_xpath('//*[@id="btnUSubmit"]')
         login_button.click()
+        time.sleep(5)
         self.driver.implicitly_wait(5)
         cookies = self.driver.get_cookies()
         with open('cookies.txt', 'w') as file:
@@ -88,9 +93,11 @@ class Crawl(object):
         content = response.text
         html = etree.HTML(content)
         company_url_list = list()
-        url_list = html.xpaht('//*[@class="pro_lists"]/div/div/h2/a/@href')
+        url_list = html.xpath('//*[@class="pro_lists"]/div/div/h2/a/@href')
+        del url_list[0]
         for url in url_list:
-            company_url = url + "contactusNews.aspx"
+            company_url = url + "/contactusNews.aspx"
+            print(company_url)
             company_url_list.append(company_url)
         return company_url_list
 
@@ -113,10 +120,43 @@ class Crawl(object):
                 jar.set(cookie['name'], cookie['value'])
         response = session.get(url, cookies=jar)
         page = response.text
+        # print("-------------------------------------------------------------------------")
+        # print(page)
         html = etree.HTML(page)
-        items = html.xpath('//*[@class="contact"]//text()')
-        contact_info_picture_url = html.xpath('//*[@class="contact"]/div/ul/li/img/@src')
-        return items, contact_info_picture_url
+        company_info = html.xpath('//*[@class="contact"]//text()')
+        contact_info_picture_url = html.xpath('//*[@class="contact"]/div/ul/li/img/@src|//*[@class="contact"]/div/p/img/@src')
+        # print("-------------------------------------------------------------------------")
+        # print(items, '\n', contact_info_picture_url)
+        # print("-------------------------------------------------------------------------")
+        return company_info, contact_info_picture_url
+
+    def parse_data(self, company_info):
+        li = []
+        for i in company_info:
+            j = i.replace('\r\n', '').replace(' ', '').replace('\u3000\u3000', '').replace('\r\n\t    ', '') \
+                .replace('\t\t\t\t\t\t', '').replace('\r\n                        ', ' ') \
+                .replace('\t', '').replace('（）', '')
+            if j != '':
+                li.append(j)
+
+        items = []
+        for i in li:
+            j = i.split('：')
+            if len(j) > 1:
+                for k in j:
+                    if k != '':
+                        items.append(k)
+            else:
+                items.append(j[0])
+
+        contact_index = items.index('联系人')
+        address_index = items.index('公司地址')
+
+        info_dict = dict()
+        info_dict['company'] = li[0]
+        info_dict['contact'] = items[contact_index + 1]
+        info_dict['address'] = items[address_index + 1]
+        return info_dict
 
     def save_data(self, data, contact_info_picture_url):
         """
@@ -147,8 +187,10 @@ class Crawl(object):
         for url in url_list:
             company_url_list = self.get_company_url(url)
             for company_url in company_url_list:
+                self.get_contact_info(company_url)
                 company_info, contact_info_picture_url = self.get_contact_info(company_url)
-                self.save_data(company_info, contact_info_picture_url)
+                info_dict = self.parse_data(company_info)
+                self.save_data(info_dict, contact_info_picture_url)
 
 
 if __name__ == '__main__':
