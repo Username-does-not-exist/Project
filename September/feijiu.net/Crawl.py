@@ -21,6 +21,10 @@ from PIL import Image
 from io import BytesIO
 from selenium.webdriver import ActionChains
 from requests.cookies import RequestsCookieJar
+import sys
+sys.path.append('../')
+from ProxyPool import IPool
+from UserAgentPool import UAPool
 
 
 class Crawl(object):
@@ -67,6 +71,15 @@ class Crawl(object):
         with open('cookies.txt', 'w') as file:
             json.dump(cookies, file)
 
+    def get_proxy(self):
+        """
+        获取代理
+        :return:
+        """
+        proxies = {
+            "http": "http://" + IPool().get_proxy(),
+        }
+
     def construct_url(self):
         url_list = []
         for i in range(1, 20):
@@ -80,28 +93,37 @@ class Crawl(object):
         :param url:
         :return:
         """
-        session = requests.session()
-        session.verify = False
-        session.headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.81 Safari/537.36"
-        }
-        jar = RequestsCookieJar()
-        with open('cookies.txt', 'r') as file:
-            cookies = json.load(file)
-            for cookie in cookies:
-                jar.set(cookie['name'], cookie['value'])
-
-        response = session.get(url, cookies=jar)
-        content = response.text
-        html = etree.HTML(content)
-        company_url_list = list()
-        url_list = html.xpath('//*[@class="pro_lists"]/div/div/h2/a/@href')
-        del url_list[0]
-        for url in url_list:
-            company_url = url + "/contactusNews.aspx"
-            print(company_url)
-            company_url_list.append(company_url)
-        return company_url_list
+        try:
+            session = requests.session()
+            session.verify = False
+            # session.headers = {
+            #     "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.81 Safari/537.36"
+            # }
+            session.headers = {
+                "User-Agent": UAPool().get()
+            }
+            jar = RequestsCookieJar()
+            with open('cookies.txt', 'r') as file:
+                cookies = json.load(file)
+                for cookie in cookies:
+                    jar.set(cookie['name'], cookie['value'])
+            proxies = {
+                "http": "http://" + IPool().get_proxy(),
+            }
+            response = session.get(url, cookies=jar, proxies=proxies, timeout=10)
+            content = response.text
+            html = etree.HTML(content)
+            company_url_list = list()
+            url_list = html.xpath('//*[@class="pro_lists"]/div/div/h2/a/@href')
+            del url_list[0]
+            for url in url_list:
+                company_url = url + "/contactusNews.aspx"
+                print(company_url)
+                company_url_list.append(company_url)
+            return company_url_list
+        except Exception as e:
+            print(e)
+            pass
 
     def get_contact_info(self, url):
         """
@@ -112,15 +134,23 @@ class Crawl(object):
         """
         session = requests.session()
         session.verify = False
+        # session.headers = {
+        #         "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.81 Safari/537.36"
+        # }
         session.headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.81 Safari/537.36"
+                "User-Agent": UAPool.get()
         }
         jar = RequestsCookieJar()
         with open('cookies.txt', 'r') as file:
             cookies = json.load(file)
             for cookie in cookies:
                 jar.set(cookie['name'], cookie['value'])
-        response = session.get(url, cookies=jar)
+
+        proxies = {
+            "http": "http://" + IPool().get_proxy(),
+        }
+
+        response = session.get(url, cookies=jar, proxies=proxies)
         page = response.text
         # print("-------------------------------------------------------------------------")
         # print(page)
@@ -206,17 +236,21 @@ class Crawl(object):
         # 2.构建url
         url_list = self.construct_url()
         for url in url_list:
-            # 3.获取企业联系方式页面对应的url
-            company_url_list = self.get_company_url(url)
-            for company_url in company_url_list:
-                # 4.提取数据
-                company_info, contact_info_picture_url = self.get_contact_info(company_url)
-                info_dict = self.parse_data(company_info)
-                # 保存数据
-                self.save_data(info_dict, contact_info_picture_url)
-                sTime = random.randint(2, 8)
-                time.sleep(sTime)
-                print("程序暂停运行{}秒".format(sTime))
+            try:
+                # 3.获取企业联系方式页面对应的url
+                company_url_list = self.get_company_url(url)
+                for company_url in company_url_list:
+                    # 4.提取数据
+                    company_info, contact_info_picture_url = self.get_contact_info(company_url)
+                    info_dict = self.parse_data(company_info)
+                    # 保存数据
+                    self.save_data(info_dict, contact_info_picture_url)
+                    sTime = random.randint(2, 8)
+                    time.sleep(sTime)
+                    print("程序暂停运行{}秒".format(sTime))
+            except Exception as e:
+                print(e)
+                pass
 
 
 if __name__ == '__main__':
