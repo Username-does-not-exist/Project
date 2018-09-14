@@ -168,8 +168,8 @@ class Crawl(object):
         # response = session.get(url, cookies=jar, proxies=proxies)
         response = session.get(url, cookies=jar)
         page = response.text
-        # print("-------------------------------------------------------------------------")
-        # print(page)
+        print("|=========================================================================================================|")
+        print(page)
         html = etree.HTML(page)
         company_info = html.xpath('//*[@class="contact"]//text()')
         contact_info_picture_url = html.xpath('//*[@class="contact"]/div/ul/li/img/@src|//*[@class="contact"]/div/p/img/@src')
