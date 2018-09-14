@@ -23,7 +23,6 @@ from selenium.webdriver import ActionChains
 from requests.cookies import RequestsCookieJar
 import sys
 sys.path.append('../')
-from ProxyPool import IPool
 from UserAgentPool import UAPool
 
 
@@ -87,19 +86,19 @@ class Crawl(object):
         try:
             session = requests.session()
             session.verify = False
-            # session.headers = {
-            #     "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.81 Safari/537.36"
-            # }
             session.headers = {
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-                "Accept-Encoding": "gzip, deflate",
-                "Accept-Language": "zh-CN,zh;q=0.9",
-                "Connection": "keep-alive",
-                "Host": "ouyanglingfeng.feijiu.net",
-                "Referer": "http://ouyanglingfeng.feijiu.net/",
-                "Upgrade-Insecure-Requests": "1",
                 "User-Agent": UAPool().get()
             }
+            # session.headers = {
+            #     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+            #     "Accept-Encoding": "gzip, deflate",
+            #     "Accept-Language": "zh-CN,zh;q=0.9",
+            #     "Connection": "keep-alive",
+            #     "Host": "ouyanglingfeng.feijiu.net",
+            #     "Referer": "http://ouyanglingfeng.feijiu.net/",
+            #     "Upgrade-Insecure-Requests": "1",
+            #     "User-Agent": UAPool().get()
+            # }
             jar = RequestsCookieJar()
             with open('cookies.txt', 'r') as file:
                 cookies = json.load(file)
@@ -136,9 +135,26 @@ class Crawl(object):
         # session.headers = {
         #         "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.81 Safari/537.36"
         # }
+        # session.headers = {
+        #         "User-Agent": UAPool().get()
+        # }
+        items = url.split('/')
+        del items[3]
+        host = items[2]
+        items[1] = "//"
+        refer = items[0] + items[1] + items[2]
+
         session.headers = {
-                "User-Agent": UAPool().get()
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+            "Accept-Encoding": "gzip, deflate",
+            "Accept-Language": "zh-CN,zh;q=0.9",
+            "Connection": "keep-alive",
+            "Host": host,
+            "Referer": refer,
+            "Upgrade-Insecure-Requests": "1",
+            "User-Agent": UAPool().get()
         }
+
         jar = RequestsCookieJar()
         with open('cookies.txt', 'r') as file:
             cookies = json.load(file)
@@ -148,7 +164,7 @@ class Crawl(object):
         # proxies = {
         #     "http": "http://" + IPool().get_proxy(),
         # }
-        #
+        
         # response = session.get(url, cookies=jar, proxies=proxies)
         response = session.get(url, cookies=jar)
         page = response.text

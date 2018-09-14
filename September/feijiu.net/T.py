@@ -360,15 +360,23 @@
 #
 # print(proxies)
 
+#
+# headers = {
+#         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+#         "Accept-Encoding": "gzip, deflate",
+#         "Accept-Language": "zh-CN,zh;q=0.9",
+#         "Connection": "keep-alive",
+#         "Host": "ouyanglingfeng.feijiu.net",
+#         "Referer": "http://ouyanglingfeng.feijiu.net/",
+#         "Upgrade-Insecure-Requests": "1",
+#         "User-Agent": ""
+#         }
 
-headers = {
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-        "Accept-Encoding": "gzip, deflate",
-        "Accept-Language": "zh-CN,zh;q=0.9",
-        "Connection": "keep-alive",
-        "Host": "ouyanglingfeng.feijiu.net",
-        "Referer": "http://ouyanglingfeng.feijiu.net/",
-        "Upgrade-Insecure-Requests": "1",
-        "User-Agent": ""
-        }
+url = "http://ouyanglingfeng.feijiu.net/contactusNews.aspx"
+items = url.split('/')
+del items[3]
+host = items[2]
+items[1] = "//"
+refer = items[0] + items[1] + items[2]
 
+print(host, '\n', refer)
