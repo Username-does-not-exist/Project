@@ -164,7 +164,7 @@ class Crawl(object):
         # proxies = {
         #     "http": "http://" + IPool().get_proxy(),
         # }
-        
+
         # response = session.get(url, cookies=jar, proxies=proxies)
         response = session.get(url, cookies=jar)
         page = response.text
