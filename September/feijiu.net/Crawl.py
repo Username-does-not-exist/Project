@@ -71,15 +71,6 @@ class Crawl(object):
         with open('cookies.txt', 'w') as file:
             json.dump(cookies, file)
 
-    def get_proxy(self):
-        """
-        获取代理
-        :return:
-        """
-        proxies = {
-            "http": "http://" + IPool().get_proxy(),
-        }
-
     def construct_url(self):
         url_list = []
         for i in range(1, 20):
@@ -100,6 +91,13 @@ class Crawl(object):
             #     "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.81 Safari/537.36"
             # }
             session.headers = {
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+                "Accept-Encoding": "gzip, deflate",
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Connection": "keep-alive",
+                "Host": "ouyanglingfeng.feijiu.net",
+                "Referer": "http://ouyanglingfeng.feijiu.net/",
+                "Upgrade-Insecure-Requests": "1",
                 "User-Agent": UAPool().get()
             }
             jar = RequestsCookieJar()
@@ -107,10 +105,11 @@ class Crawl(object):
                 cookies = json.load(file)
                 for cookie in cookies:
                     jar.set(cookie['name'], cookie['value'])
-            proxies = {
-                "http": "http://" + IPool().get_proxy(),
-            }
-            response = session.get(url, cookies=jar, proxies=proxies, timeout=10)
+            # proxies = {
+            #     "http": "http://" + IPool().get_proxy(),
+            # }
+            # response = session.get(url, cookies=jar, proxies=proxies, timeout=10)
+            response = session.get(url, cookies=jar)
             content = response.text
             html = etree.HTML(content)
             company_url_list = list()
@@ -138,7 +137,7 @@ class Crawl(object):
         #         "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.81 Safari/537.36"
         # }
         session.headers = {
-                "User-Agent": UAPool.get()
+                "User-Agent": UAPool().get()
         }
         jar = RequestsCookieJar()
         with open('cookies.txt', 'r') as file:
@@ -146,11 +145,12 @@ class Crawl(object):
             for cookie in cookies:
                 jar.set(cookie['name'], cookie['value'])
 
-        proxies = {
-            "http": "http://" + IPool().get_proxy(),
-        }
-
-        response = session.get(url, cookies=jar, proxies=proxies)
+        # proxies = {
+        #     "http": "http://" + IPool().get_proxy(),
+        # }
+        #
+        # response = session.get(url, cookies=jar, proxies=proxies)
+        response = session.get(url, cookies=jar)
         page = response.text
         # print("-------------------------------------------------------------------------")
         # print(page)
@@ -188,7 +188,6 @@ class Crawl(object):
         try:
             contact_index = items.index('联系人')
             address_index = items.index('公司地址')
-
             info_dict = dict()
             info_dict['company'] = li[0]
             info_dict['contact'] = items[contact_index + 1]

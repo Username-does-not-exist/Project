@@ -349,13 +349,26 @@
 # address = items[address_index+1]
 # print(company, contact, '\n', address)
 
-import sys
+# import sys
+#
+# sys.path.append('../')
+# from ProxyPool import IPool
+#
+# proxies = {
+#             "http": "http://" + IPool().get_proxy(),
+#         }
+#
+# print(proxies)
 
-sys.path.append('../')
-from ProxyPool import IPool
 
-proxies = {
-            "http": "http://" + IPool().get_proxy(),
+headers = {
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+        "Accept-Encoding": "gzip, deflate",
+        "Accept-Language": "zh-CN,zh;q=0.9",
+        "Connection": "keep-alive",
+        "Host": "ouyanglingfeng.feijiu.net",
+        "Referer": "http://ouyanglingfeng.feijiu.net/",
+        "Upgrade-Insecure-Requests": "1",
+        "User-Agent": ""
         }
 
-print(proxies)
