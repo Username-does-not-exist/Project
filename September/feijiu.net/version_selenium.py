@@ -184,7 +184,7 @@ class Crawl(object):
             if info_dict is not None:
                 company = info_dict['company']
                 path = os.getcwd()
-                folder = path + "\\Image_GY"
+                folder = path + "\\Image_QG"
                 if not os.path.exists(folder):
                     os.mkdir(folder)
                 if contact_info_picture_url is not None:
