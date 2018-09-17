@@ -186,6 +186,8 @@ class Crawl(object):
                     os.mkdir(folder)
                 if len(contact_info_picture_url) >= 1:
                     url = contact_info_picture_url[0]
+                    print("================================================")
+                    print(url)
                     response = requests.get(url)
                     image = Image.open(BytesIO(response.content))
                     image.save(folder + '/{}.png'.format(company))
