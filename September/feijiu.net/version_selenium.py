@@ -126,10 +126,10 @@ class Crawl(object):
             items = contant.split('\n')
             if items and contact_number_info is not None:
                 return items, contact_number_info
-            self.driver.back()
+            # self.driver.back()
         except Exception as e:
             print(e)
-            self.driver.back()
+            # self.driver.back()
             return None, None
 
     def parse_data(self, company_info):
@@ -209,7 +209,7 @@ class Crawl(object):
                 company_info, company_contact_info = self.get_contact_info(url)
                 company_dict = self.parse_data(company_info)
                 self.save_data(company_dict, company_contact_info)
-                self.driver.back()
+                # self.driver.back()
             if next_page_url is None:
                 print("抓取完成")
                 break

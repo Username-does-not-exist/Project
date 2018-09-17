@@ -72,7 +72,7 @@ class Crawl(object):
 
     def construct_url(self):
         url_list = []
-        for i in range(1, 20):
+        for i in range(2, 20):
             url = self.start_url.format(i)
             url_list.append(url)
         return url_list
@@ -169,7 +169,7 @@ class Crawl(object):
         response = session.get(url, cookies=jar)
         page = response.text
         print("|=========================================================================================================|")
-        print(page)
+        # print(page)
         html = etree.HTML(page)
         company_info = html.xpath('//*[@class="contact"]//text()')
         contact_info_picture_url = html.xpath('//*[@class="contact"]/div/ul/li/img/@src|//*[@class="contact"]/div/p/img/@src')
