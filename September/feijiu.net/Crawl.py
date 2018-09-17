@@ -187,7 +187,6 @@ class Crawl(object):
         li = []
         for i in company_info:
             j = i.replace('\r\n', '').replace(' ', '').replace('\u3000\u3000', '').replace('\r\n\t    ', '') \
-            +
                 .replace('\t\t\t\t\t\t', '').replace('\r\n                        ', ' ') \
                 .replace('\t', '').replace('（）', '')
             if j != '':
