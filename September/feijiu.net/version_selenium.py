@@ -141,34 +141,35 @@ class Crawl(object):
         :param company_info:
         :return:
         """
-        li = []
-        for i in company_info:
-            j = i.replace('\r\n', '').replace(' ', '').replace('\u3000\u3000', '').replace('\r\n\t    ', '') \
-                .replace('\t\t\t\t\t\t', '').replace('\r\n                        ', ' ') \
-                .replace('\t', '').replace('（）', '')
-            if j != '':
-                li.append(j)
+        if company_info is not None:
+            li = []
+            for i in company_info:
+                j = i.replace('\r\n', '').replace(' ', '').replace('\u3000\u3000', '').replace('\r\n\t    ', '') \
+                    .replace('\t\t\t\t\t\t', '').replace('\r\n                        ', ' ') \
+                    .replace('\t', '').replace('（）', '')
+                if j != '':
+                    li.append(j)
 
-        items = []
-        for i in li:
-            j = i.split('：')
-            if len(j) > 1:
-                for k in j:
-                    if k != '':
-                        items.append(k)
-            else:
-                items.append(j[0])
-        try:
-            contact_index = items.index('联系人')
-            address_index = items.index('公司地址')
-            info_dict = dict()
-            info_dict['company'] = li[0]
-            info_dict['contact'] = items[contact_index + 1]
-            info_dict['address'] = items[address_index + 1]
-            return info_dict
-        except Exception as e:
-            print(e)
-            pass
+            items = []
+            for i in li:
+                j = i.split('：')
+                if len(j) > 1:
+                    for k in j:
+                        if k != '':
+                            items.append(k)
+                else:
+                    items.append(j[0])
+            try:
+                contact_index = items.index('联系人')
+                address_index = items.index('公司地址')
+                info_dict = dict()
+                info_dict['company'] = li[0]
+                info_dict['contact'] = items[contact_index + 1]
+                info_dict['address'] = items[address_index + 1]
+                return info_dict
+            except Exception as e:
+                print(e)
+                pass
 
     def save_data(self, info_dict, contact_info_picture_url):
         """
@@ -208,10 +209,14 @@ class Crawl(object):
         while True:
             comapny_url_list, next_page_url = self.get_company_url(self.start_url)
             for url in comapny_url_list:
-                company_info, company_contact_info = self.get_contact_info(url)
-                company_dict = self.parse_data(company_info)
-                self.save_data(company_dict, company_contact_info)
-                # self.driver.back()
+                try:
+                    company_info, company_contact_info = self.get_contact_info(url)
+                    company_dict = self.parse_data(company_info)
+                    self.save_data(company_dict, company_contact_info)
+                    # self.driver.back()
+                except Exception as e:
+                    print(e)
+                    pass
             if next_page_url is None:
                 print("抓取完成")
                 break
