@@ -73,32 +73,31 @@ class Crawl(object):
         for cookie in cookies:
             self.driver.add_cookie(cookie)
 
-    def construct_url(self):
-        url_list = []
-        for i in range(1, 20):
-            url = self.start_url.format(i)
-            url_list.append(url)
-        return url_list
-
     def get_company_url(self, url):
         """
         获取公司详情页联系方式的url
         :param url:
         :return:
         """
-        self.driver.get(url)
-        self.driver.implicitly_wait(5)
-        items = self.driver.find_elements_by_xpath('//*[@class="pro_lists"]/div/div/h2/a')
-        url_list = []
-        for item in items:
-            url = item.get_attribute('href')
-            url_list.append(url)
-        del url_list[0]
-        company_url_list = []
-        for url in url_list:
-            company_url = url + "/contactusNews.aspx"
-            company_url_list.append(company_url)
-        return company_url_list
+        try:
+            self.driver.get(url)
+            self.driver.implicitly_wait(5)
+            items = self.driver.find_elements_by_xpath('//*[@class="pro_lists"]/div/div/h2/a')
+            next_page_url = self.driver.find_element_by_xpath('//*[@id="AspNetPager1"]/a[last()-1]').get_attribute('href')
+            url_list = []
+            for item in items:
+                url = item.get_attribute('href')
+                url_list.append(url)
+            # del url_list[0]
+            # company_url_list = []
+            # for url in url_list:
+            #     company_url = url + "/contactusNews.aspx"
+            #     print(company_url)
+            #     company_url_list.append(company_url)
+            return url_list, next_page_url
+        except Exception as e:
+            print(e)
+            return None, None
 
     def get_contact_info(self, url):
         """
@@ -109,19 +108,27 @@ class Crawl(object):
         """
         try:
             self.driver.get(url)
+            contact_element = self.driver.find_element_by_xpath('//*[@id="nav"]/ul/li[last()-1]/a')
+            if contact_element.text != "联系我们":
+                contact_element = self.driver.find_element_by_xpath('//*[@id="nav"]/ul/li[last()]/a')
+            contact_element.click()
+            self.driver.implicitly_wait(2)
             # print(self.driver.page_source)
-            items = self.driver.find_element_by_xpath('//*[@class="contact"]').text
-            self.driver.implicitly_wait(5)
+            contant = self.driver.find_element_by_xpath('//*[@class="contact"]').text
+            print(contant)
             # print("|================================================================================================================================|")
             contact_number_info = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li/img|//*[@class="contact"]/div/p/img|//*[@class="contact"]/p[1]/img').get_attribute('src')
             # print(items)
             # print("|================================================================================================================================|")
             # print(contact_number_info)
             # print("|================================================================================================================================|")
+            items = contant.split('\n')
             if items and contact_number_info is not None:
                 return items, contact_number_info
+            self.driver.back()
         except Exception as e:
             print(e)
+            self.driver.back()
             return None, None
 
     def parse_data(self, company_info):
@@ -194,20 +201,17 @@ class Crawl(object):
         """
         # 1.模拟登陆获取cookies保存到本地
         self.login_and_cookies()
-        # 2.构建url
-        url_list = self.construct_url()
-        for url in url_list:
-            contact_url_list = self.get_company_url(url)
-            print(contact_url_list)
-            for contact_url in contact_url_list:
-                # self.get_contact_info(contact_url)
-                items, contact_number_info = self.get_contact_info(contact_url)
-                if items is not None:
-                    info_dict = self.parse_data(items)
-                    self.save_data(info_dict, contact_number_info)
-                sTime = random.randint(1, 3)
-                time.sleep(sTime)
-                print("程序暂停运行{}秒".format(sTime))
+        # 获取企业详情页的url
+        while True:
+            comapny_url_list, next_page_url = self.driver.get(self.start_url)
+            for url in comapny_url_list:
+                company_info, company_contact_info = self.get_contact_info(url)
+                company_dict = self.parse_data(company_info)
+                self.save_data(company_dict, company_contact_info)
+                self.driver.back()
+            if next_page_url is None:
+                print("抓取完成")
+                break
 
 
 if __name__ == '__main__':
