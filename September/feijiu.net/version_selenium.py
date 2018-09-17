@@ -40,8 +40,8 @@ class Crawl(object):
         self.rPort = 6379
         client = MongoClient(host=self.Host, port=self.Port)
         self.rConn = redis.Redis(host=self.Host, port=self.rPort)
-        self.db = client.FJgy
-        self.collection = self.db.gy
+        self.db = client.FJqg
+        self.collection = self.db.qg
 
     def login_and_cookies(self):
         """
@@ -81,8 +81,10 @@ class Crawl(object):
         try:
             self.driver.get(url)
             self.driver.implicitly_wait(2)
-            GY = self.driver.find_element_by_xpath('//*[@class="type"]/div/a[1]')
-            GY.click()
+            # GY = self.driver.find_element_by_xpath('//*[@class="type"]/div/a[1]')
+            # GY.click()
+            QG = self.driver.find_element_by_xpath('//*[@class="type"]/div/a[1]')
+            QG.click()
             self.driver.implicitly_wait(2)
             items = self.driver.find_elements_by_xpath('//*[@class="pro_lists"]/div/div/h2/a')
             next_page_url = self.driver.find_element_by_xpath('//*[@id="AspNetPager1"]/a[last()-1]').get_attribute('href')
