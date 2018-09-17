@@ -29,7 +29,7 @@ from UserAgentPool import UAPool
 class Crawl(object):
 
     def __init__(self):
-        self.start_url = "http://www.feijiu.net/gq/s/g1p{}k%b7%cf%d6%bd/"
+        self.start_url = "http://www.feijiu.net/gq/s/k%b7%cf%d6%bd/"
         self.login_url = "http://www.feijiu.net/login.aspx"
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--headless')
@@ -65,7 +65,6 @@ class Crawl(object):
         login_button = self.driver.find_element_by_xpath('//*[@id="btnUSubmit"]')
         login_button.click()
         time.sleep(5)
-        self.driver.implicitly_wait(5)
         cookies = self.driver.get_cookies()
         with open('cookies.txt', 'w') as file:
             json.dump(cookies, file)
@@ -109,15 +108,17 @@ class Crawl(object):
         try:
             self.driver.get(url)
             contact_element = self.driver.find_element_by_xpath('//*[@id="nav"]/ul/li[last()-1]/a')
+            print(contact_element.text)
             if contact_element.text != "联系我们":
                 contact_element = self.driver.find_element_by_xpath('//*[@id="nav"]/ul/li[last()]/a')
             contact_element.click()
-            self.driver.implicitly_wait(2)
+            # self.driver.implicitly_wait(2)
             # print(self.driver.page_source)
             contant = self.driver.find_element_by_xpath('//*[@class="contact"]').text
             print(contant)
             # print("|================================================================================================================================|")
             contact_number_info = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li/img|//*[@class="contact"]/div/p/img|//*[@class="contact"]/p[1]/img').get_attribute('src')
+            print(contact_number_info)
             # print(items)
             # print("|================================================================================================================================|")
             # print(contact_number_info)
@@ -191,8 +192,8 @@ class Crawl(object):
             print(e)
             pass
 
-    # def __del__(self):
-    #     self.driver.close()
+    def __del__(self):
+        self.driver.close()
 
     def main(self):
         """
@@ -203,7 +204,7 @@ class Crawl(object):
         self.login_and_cookies()
         # 获取企业详情页的url
         while True:
-            comapny_url_list, next_page_url = self.driver.get(self.start_url)
+            comapny_url_list, next_page_url = self.get_company_url(self.start_url)
             for url in comapny_url_list:
                 company_info, company_contact_info = self.get_contact_info(url)
                 company_dict = self.parse_data(company_info)
