@@ -1,6 +1,5 @@
 """
 获取企业url对应的xpath://*[@id="list_item"]/div[1]/div/div/div[3]/h2/a
-
 联系方式页面url = company_url + "contactusNews.aspx"
 
 所需数据：公司名称 联系人 公司地址 联系电话
@@ -29,6 +28,7 @@ from UserAgentPool import UAPool
 class Crawl(object):
 
     def __init__(self):
+        # 求购
         self.start_url = "http://www.feijiu.net/gq/s/g1p{}k%b7%cf%d6%bd/"
         self.login_url = "http://www.feijiu.net/login.aspx"
         chrome_options = webdriver.ChromeOptions()
@@ -72,7 +72,7 @@ class Crawl(object):
 
     def construct_url(self):
         url_list = []
-        for i in range(2, 20):
+        for i in range(1, 9):
             url = self.start_url.format(i)
             url_list.append(url)
         return url_list

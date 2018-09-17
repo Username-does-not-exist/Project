@@ -80,7 +80,10 @@ class Crawl(object):
         """
         try:
             self.driver.get(url)
-            self.driver.implicitly_wait(5)
+            self.driver.implicitly_wait(2)
+            GY = self.driver.find_element_by_xpath('//*[@class="type"]/div/a[1]')
+            GY.click()
+            self.driver.implicitly_wait(2)
             items = self.driver.find_elements_by_xpath('//*[@class="pro_lists"]/div/div/h2/a')
             next_page_url = self.driver.find_element_by_xpath('//*[@id="AspNetPager1"]/a[last()-1]').get_attribute('href')
             url_list = []
