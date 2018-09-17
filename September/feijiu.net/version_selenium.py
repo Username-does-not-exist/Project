@@ -110,10 +110,10 @@ class Crawl(object):
         """
         try:
             self.driver.get(url)
-            contact_element = self.driver.find_element_by_xpath('//*[@id="nav"]/ul/li[last()-1]/a')
+            contact_element = self.driver.find_element_by_xpath('//*[@id="nav"]/ul/li[last()-1]/a|//*[@class="nav_list"]/li[last()]/a')
             print(contact_element.text)
             if contact_element.text != "联系我们":
-                contact_element = self.driver.find_element_by_xpath('//*[@id="nav"]/ul/li[last()]/a')
+                contact_element = self.driver.find_element_by_xpath('//*[@id="nav"]/ul/li[last()]/a|//*[@class="nav_list"]/li[last()-1]/a')
             contact_element.click()
             # self.driver.implicitly_wait(2)
             # print(self.driver.page_source)
