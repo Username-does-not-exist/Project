@@ -120,15 +120,15 @@ class Crawl(object):
             contant = self.driver.find_element_by_xpath('//*[@class="contact"]').text
             print(contant)
             # print("|================================================================================================================================|")
-            contact_number_info = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li/img|//*[@class="contact"]/div/p/img|//*[@class="contact"]/p[1]/img').get_attribute('src')
-            print(contact_number_info)
+            company_contact_info = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li/img|//*[@class="contact"]/div/p/img|//*[@class="contact"]/p[1]/img').get_attribute('src')
+            print(company_contact_info)
             # print(items)
             # print("|================================================================================================================================|")
             # print(contact_number_info)
             # print("|================================================================================================================================|")
             items = contant.split('\n')
-            if items and contact_number_info is not None:
-                return items, contact_number_info
+            if items and company_contact_info is not None:
+                return items, company_contact_info
             # self.driver.back()
         except Exception as e:
             print(e)
@@ -184,11 +184,8 @@ class Crawl(object):
                 folder = path + "\\Image_GY"
                 if not os.path.exists(folder):
                     os.mkdir(folder)
-                if len(contact_info_picture_url) >= 1:
-                    url = contact_info_picture_url[0]
-                    print("================================================")
-                    print(url)
-                    response = requests.get(url)
+                if contact_info_picture_url is not None:
+                    response = requests.get(contact_info_picture_url)
                     image = Image.open(BytesIO(response.content))
                     image.save(folder + '/{}.png'.format(company))
                 self.collection.insert(info_dict)
