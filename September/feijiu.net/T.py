@@ -371,12 +371,17 @@
 #         "Upgrade-Insecure-Requests": "1",
 #         "User-Agent": ""
 #         }
+#
+# url = "http://ouyanglingfeng.feijiu.net/contactusNews.aspx"
+# items = url.split('/')
+# del items[3]
+# host = items[2]
+# items[1] = "//"
+# refer = items[0] + items[1] + items[2]
+#
+# print(host, '\n', refer)
 
-url = "http://ouyanglingfeng.feijiu.net/contactusNews.aspx"
-items = url.split('/')
-del items[3]
-host = items[2]
-items[1] = "//"
-refer = items[0] + items[1] + items[2]
 
-print(host, '\n', refer)
+li = ['http://w437254191.feijiu.net//contactusNews.aspx', 'http://ma1571636.feijiu.net//contactusNews.aspx', 'http://wpm7199.feijiu.net//contactusNews.aspx', 'http://feijiu0153.feijiu.net//contactusNews.aspx', 'http://wym1666.feijiu.net//contactusNews.aspx', 'http://dupeng6269.feijiu.net//contactusNews.aspx', 'http://wenhao1153.feijiu.net//contactusNews.aspx', 'http://pudong.feijiu.net//contactusNews.aspx', 'http://qingdaochuanqi.feijiu.net//contactusNews.aspx', 'http://feibao960.feijiu.net//contactusNews.aspx', 'http://13991169731.feijiu.net//contactusNews.aspx', 'http://qaz123456zxc.feijiu.net//contactusNews.aspx', 'http://as615948147.feijiu.net//contactusNews.aspx', 'http://13832290787.feijiu.net//contactusNews.aspx', 'http://15918630755.feijiu.net//contactusNews.aspx', 'http://feilongfeijiu.feijiu.net//contactusNews.aspx', 'http://xiu886520.feijiu.net//contactusNews.aspx', 'http://ruihezhiye.feijiu.net//contactusNews.aspx', 'http://jixieshebei678.feijiu.net//contactusNews.aspx', 'http://zzq69.feijiu.net//contactusNews.aspx', 'http://wwchache.feijiu.net//contactusNews.aspx', 'http://wang15527569644.feijiu.net//contactusNews.aspx', 'http://tcxwz.feijiu.net//contactusNews.aspx', 'http://yuanqinfang1.feijiu.net//contactusNews.aspx', 'http://fuyingjixie.feijiu.net//contactusNews.aspx']
+for i in li:
+    print(i)

@@ -107,11 +107,22 @@ class Crawl(object):
         :param cookies:
         :return:
         """
-        self.driver.get(url)
-        items = self.driver.find_element_by_xpath('//*[@class="contact"]').text
-        contact_number_info = self.driver.find_element('//*[@class="contact"]/div/ul/li/img|//*[@class="contact"]/div/p/img').get_attribute('src')
-        if items and contact_number_info is not None:
-            return items, contact_number_info
+        try:
+            self.driver.get(url)
+            # print(self.driver.page_source)
+            items = self.driver.find_element_by_xpath('//*[@class="contact"]').text
+            self.driver.implicitly_wait(5)
+            # print("|================================================================================================================================|")
+            contact_number_info = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li/img|//*[@class="contact"]/div/p/img|//*[@class="contact"]/p[1]/img').get_attribute('src')
+            # print(items)
+            # print("|================================================================================================================================|")
+            # print(contact_number_info)
+            # print("|================================================================================================================================|")
+            if items and contact_number_info is not None:
+                return items, contact_number_info
+        except Exception as e:
+            print(e)
+            return None, None
 
     def parse_data(self, company_info):
         """
@@ -173,8 +184,8 @@ class Crawl(object):
             print(e)
             pass
 
-    def __del__(self):
-        self.driver.close()
+    # def __del__(self):
+    #     self.driver.close()
 
     def main(self):
         """
@@ -187,11 +198,14 @@ class Crawl(object):
         url_list = self.construct_url()
         for url in url_list:
             contact_url_list = self.get_company_url(url)
+            print(contact_url_list)
             for contact_url in contact_url_list:
+                # self.get_contact_info(contact_url)
                 items, contact_number_info = self.get_contact_info(contact_url)
-                info_dict = self.parse_data(items)
-                self.save_data(info_dict, contact_number_info)
-                sTime = random.randint(2, 8)
+                if items is not None:
+                    info_dict = self.parse_data(items)
+                    self.save_data(info_dict, contact_number_info)
+                sTime = random.randint(1, 3)
                 time.sleep(sTime)
                 print("程序暂停运行{}秒".format(sTime))
 
