@@ -82,7 +82,7 @@ class Crawl(object):
             self.driver.implicitly_wait(2)
             # GY = self.driver.find_element_by_xpath('//*[@class="type"]/div/a[1]')
             # GY.click()
-            QG = self.driver.find_element_by_xpath('//*[@class="type"]/div/a[1]')
+            QG = self.driver.find_element_by_xpath('//*[@class="type"]/div/a[2]')
             QG.click()
             self.driver.implicitly_wait(2)
             items = self.driver.find_elements_by_xpath('//*[@class="pro_lists"]/div/div/h2/a')
