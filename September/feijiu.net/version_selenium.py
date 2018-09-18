@@ -208,14 +208,16 @@ class Crawl(object):
         # 1.模拟登陆获取cookies保存到本地
         self.login_and_cookies()
         # 获取企业详情页的url
+        comapny_url_list, next_page_url = self.get_company_url(self.start_url)
         while True:
-            comapny_url_list, next_page_url = self.get_company_url(self.start_url)
+
             for url in comapny_url_list:
                 try:
                     company_info, company_contact_info = self.get_contact_info(url)
                     company_dict = self.parse_data(company_info)
                     self.save_data(company_dict, company_contact_info)
                     # self.driver.back()
+                    company_url_list, next_page_url = self.get_company_url(next_page_url)
                 except Exception as e:
                     print(e)
                     pass

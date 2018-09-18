@@ -318,46 +318,46 @@
 # #
 # # print(info, '\n', contact_info_picture_url)
 #
-l1 = ['\r\n                ', '深圳海隆达贸易有限公司', '\r\n                        ', '联 系 人：', '吴志兵', '（）', '\r\n                        ', '\r\n                        \r\n                        ', '移动电话：', '\r\n                        ', '电\u3000\u3000话：86-0755', '\r\n                        ', '传\u3000\u3000真：', '\r\n                        ', '公司地址：广东省深圳市\t\t\t\t\t\t \t\t\t\t\t\t红岭中路法制报社后楼', '\r\n                        ', '邮政编码：', '\r\n                        ', '电子邮箱：', '\r\n                        ', '公司主页：http://w437254191.feijiu.net', '\r\n                        \r\n                        \r\n                ', '\r\n                    ', '\r\n                ', '\r\n                ', '\r\n            ']
-l2 = ['\r\n\t    ', '康晟造纸设备调剂经营部', '\r\n                        ', '联 系 人：', '马永康', '（）', '\r\n                        ', '查看公司介绍', '查看资质认证', '\r\n                        ', '\r\n                        ', '移动电话：', '\r\n                        ', '电\u3000\u3000话：', '\r\n                        ', '传\u3000\u3000真：', '\r\n                        ', '公司地址：', '\r\n                        ', '邮政编码：', '\r\n                        ', '电子邮箱：', '\r\n                        ', '公司主页：http://ma15716361000.feijiu.net/', '\r\n                        ', '\r\n                        ', '\r\n\t    ', '\r\n\t    ', '\r\n\t    ', '\r\n\t  ']
-l3 = ['\r\n                ', '项城市蝾螈再生资源回收有限公司', '\r\n                        ', '联 系 人：', '王先生龚先生', '（经理）', '\r\n                        ', '\r\n                        \r\n                        ', '移动电话：', '\r\n                        ', '电\u3000\u3000话：', '\r\n                        ', '传\u3000\u3000真：', '\r\n                        ', '公司地址：河南省周口市项城市', '\r\n                        ', '邮政编码：', '\r\n                        ', '电子邮箱：', '\r\n                        ', '公司主页：http://wpm7199.feijiu.net', '\r\n                        \r\n                        \r\n                ', '\r\n                    ', '\r\n                ', '\r\n                ', '\r\n            ']
-l4 = ['\r\n\t    ', '绍兴市柯桥区安昌镇富宝废旧物资回收站', '\r\n                        ', '联 系 人：', '魏先生', '（总经理）', '\r\n                        ', '查看公司介绍', '查看资质认证', '\r\n                        ', '\r\n                        ', '移动电话：', '\r\n                        ', '电\u3000\u3000话：', '\r\n                        ', '传\u3000\u3000真：', '\r\n                        ', '公司地址：浙江省绍兴市柯桥区安昌镇富宝废旧物资回收站', '\r\n                        ', '邮政编码：', '\r\n                        ', '电子邮箱：', '\r\n                        ', '公司主页：http://wym1666.feijiu.net/', '\r\n                        ', '\r\n                        ', '\r\n\t    ', '\r\n\t    ', '\r\n\t    ', '\r\n\t  ']
-
-astr = """深圳海隆达贸易有限公司
-联 系 人：吴志兵（）
-移动电话：
-电　　话：86-0755
-传　　真：
-公司地址：广东省深圳市 红岭中路法制报社后楼
-邮政编码：
-电子邮箱：
-公司主页：http://w437254191.feijiu.net"""
-
-li = astr.split('\n')
-for i in l2:
-    j = i.replace('\r\n', '').replace(' ', '').replace('\u3000\u3000', '').replace('\r\n\t    ', '')\
-        .replace('\t\t\t\t\t\t', '').replace('\r\n                        ', ' ')\
-        .replace('\t', '').replace('（）', '')
-    if j != '':
-        li.append(j)
-
-items = []
-for i in li:
-    j = i.split('：')
-    if len(j) > 1:
-        for k in j:
-            if k != '':
-                items.append(k)
-    else:
-        items.append(j[0])
-
-contact_index = items.index('联系人')
-address_index = items.index('公司地址')
-
-company = li[0]
-contact = items[contact_index+1]
-address = items[address_index+1]
-print(company, contact, '\n', address)
+# l1 = ['\r\n                ', '深圳海隆达贸易有限公司', '\r\n                        ', '联 系 人：', '吴志兵', '（）', '\r\n                        ', '\r\n                        \r\n                        ', '移动电话：', '\r\n                        ', '电\u3000\u3000话：86-0755', '\r\n                        ', '传\u3000\u3000真：', '\r\n                        ', '公司地址：广东省深圳市\t\t\t\t\t\t \t\t\t\t\t\t红岭中路法制报社后楼', '\r\n                        ', '邮政编码：', '\r\n                        ', '电子邮箱：', '\r\n                        ', '公司主页：http://w437254191.feijiu.net', '\r\n                        \r\n                        \r\n                ', '\r\n                    ', '\r\n                ', '\r\n                ', '\r\n            ']
+# l2 = ['\r\n\t    ', '康晟造纸设备调剂经营部', '\r\n                        ', '联 系 人：', '马永康', '（）', '\r\n                        ', '查看公司介绍', '查看资质认证', '\r\n                        ', '\r\n                        ', '移动电话：', '\r\n                        ', '电\u3000\u3000话：', '\r\n                        ', '传\u3000\u3000真：', '\r\n                        ', '公司地址：', '\r\n                        ', '邮政编码：', '\r\n                        ', '电子邮箱：', '\r\n                        ', '公司主页：http://ma15716361000.feijiu.net/', '\r\n                        ', '\r\n                        ', '\r\n\t    ', '\r\n\t    ', '\r\n\t    ', '\r\n\t  ']
+# l3 = ['\r\n                ', '项城市蝾螈再生资源回收有限公司', '\r\n                        ', '联 系 人：', '王先生龚先生', '（经理）', '\r\n                        ', '\r\n                        \r\n                        ', '移动电话：', '\r\n                        ', '电\u3000\u3000话：', '\r\n                        ', '传\u3000\u3000真：', '\r\n                        ', '公司地址：河南省周口市项城市', '\r\n                        ', '邮政编码：', '\r\n                        ', '电子邮箱：', '\r\n                        ', '公司主页：http://wpm7199.feijiu.net', '\r\n                        \r\n                        \r\n                ', '\r\n                    ', '\r\n                ', '\r\n                ', '\r\n            ']
+# l4 = ['\r\n\t    ', '绍兴市柯桥区安昌镇富宝废旧物资回收站', '\r\n                        ', '联 系 人：', '魏先生', '（总经理）', '\r\n                        ', '查看公司介绍', '查看资质认证', '\r\n                        ', '\r\n                        ', '移动电话：', '\r\n                        ', '电\u3000\u3000话：', '\r\n                        ', '传\u3000\u3000真：', '\r\n                        ', '公司地址：浙江省绍兴市柯桥区安昌镇富宝废旧物资回收站', '\r\n                        ', '邮政编码：', '\r\n                        ', '电子邮箱：', '\r\n                        ', '公司主页：http://wym1666.feijiu.net/', '\r\n                        ', '\r\n                        ', '\r\n\t    ', '\r\n\t    ', '\r\n\t    ', '\r\n\t  ']
+#
+# astr = """深圳海隆达贸易有限公司
+# 联 系 人：吴志兵（）
+# 移动电话：
+# 电　　话：86-0755
+# 传　　真：
+# 公司地址：广东省深圳市 红岭中路法制报社后楼
+# 邮政编码：
+# 电子邮箱：
+# 公司主页：http://w437254191.feijiu.net"""
+#
+# li = astr.split('\n')
+# for i in l2:
+#     j = i.replace('\r\n', '').replace(' ', '').replace('\u3000\u3000', '').replace('\r\n\t    ', '')\
+#         .replace('\t\t\t\t\t\t', '').replace('\r\n                        ', ' ')\
+#         .replace('\t', '').replace('（）', '')
+#     if j != '':
+#         li.append(j)
+#
+# items = []
+# for i in li:
+#     j = i.split('：')
+#     if len(j) > 1:
+#         for k in j:
+#             if k != '':
+#                 items.append(k)
+#     else:
+#         items.append(j[0])
+#
+# contact_index = items.index('联系人')
+# address_index = items.index('公司地址')
+#
+# company = li[0]
+# contact = items[contact_index+1]
+# address = items[address_index+1]
+# print(company, contact, '\n', address)
 
 # import sys
 #
@@ -392,6 +392,24 @@ print(company, contact, '\n', address)
 # print(host, '\n', refer)
 
 
-li = ['http://w437254191.feijiu.net//contactusNews.aspx', 'http://ma1571636.feijiu.net//contactusNews.aspx', 'http://wpm7199.feijiu.net//contactusNews.aspx', 'http://feijiu0153.feijiu.net//contactusNews.aspx', 'http://wym1666.feijiu.net//contactusNews.aspx', 'http://dupeng6269.feijiu.net//contactusNews.aspx', 'http://wenhao1153.feijiu.net//contactusNews.aspx', 'http://pudong.feijiu.net//contactusNews.aspx', 'http://qingdaochuanqi.feijiu.net//contactusNews.aspx', 'http://feibao960.feijiu.net//contactusNews.aspx', 'http://13991169731.feijiu.net//contactusNews.aspx', 'http://qaz123456zxc.feijiu.net//contactusNews.aspx', 'http://as615948147.feijiu.net//contactusNews.aspx', 'http://13832290787.feijiu.net//contactusNews.aspx', 'http://15918630755.feijiu.net//contactusNews.aspx', 'http://feilongfeijiu.feijiu.net//contactusNews.aspx', 'http://xiu886520.feijiu.net//contactusNews.aspx', 'http://ruihezhiye.feijiu.net//contactusNews.aspx', 'http://jixieshebei678.feijiu.net//contactusNews.aspx', 'http://zzq69.feijiu.net//contactusNews.aspx', 'http://wwchache.feijiu.net//contactusNews.aspx', 'http://wang15527569644.feijiu.net//contactusNews.aspx', 'http://tcxwz.feijiu.net//contactusNews.aspx', 'http://yuanqinfang1.feijiu.net//contactusNews.aspx', 'http://fuyingjixie.feijiu.net//contactusNews.aspx']
-for i in li:
-    print(i)
+# li = ['http://w437254191.feijiu.net//contactusNews.aspx', 'http://ma1571636.feijiu.net//contactusNews.aspx', 'http://wpm7199.feijiu.net//contactusNews.aspx', 'http://feijiu0153.feijiu.net//contactusNews.aspx', 'http://wym1666.feijiu.net//contactusNews.aspx', 'http://dupeng6269.feijiu.net//contactusNews.aspx', 'http://wenhao1153.feijiu.net//contactusNews.aspx', 'http://pudong.feijiu.net//contactusNews.aspx', 'http://qingdaochuanqi.feijiu.net//contactusNews.aspx', 'http://feibao960.feijiu.net//contactusNews.aspx', 'http://13991169731.feijiu.net//contactusNews.aspx', 'http://qaz123456zxc.feijiu.net//contactusNews.aspx', 'http://as615948147.feijiu.net//contactusNews.aspx', 'http://13832290787.feijiu.net//contactusNews.aspx', 'http://15918630755.feijiu.net//contactusNews.aspx', 'http://feilongfeijiu.feijiu.net//contactusNews.aspx', 'http://xiu886520.feijiu.net//contactusNews.aspx', 'http://ruihezhiye.feijiu.net//contactusNews.aspx', 'http://jixieshebei678.feijiu.net//contactusNews.aspx', 'http://zzq69.feijiu.net//contactusNews.aspx', 'http://wwchache.feijiu.net//contactusNews.aspx', 'http://wang15527569644.feijiu.net//contactusNews.aspx', 'http://tcxwz.feijiu.net//contactusNews.aspx', 'http://yuanqinfang1.feijiu.net//contactusNews.aspx', 'http://fuyingjixie.feijiu.net//contactusNews.aspx']
+# for i in li:
+#     print(i)
+#
+# import xlsxwriter
+#
+#
+# workbook = xlsxwriter.Workbook('t.xlsx')
+# worksheet = workbook.add_worksheet()
+#
+#
+# print(worksheet)
+
+import xlsxwriter
+
+workbook = xlsxwriter.Workbook('hello.xlsx')
+worksheet = workbook.add_worksheet('test')
+worksheet.write('A1', 'Hello, world')
+workbook.close()
+
+print(worksheet)
