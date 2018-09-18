@@ -39,8 +39,8 @@ class Crawl(object):
         self.rPort = 6379
         client = MongoClient(host=self.Host, port=self.Port)
         self.rConn = redis.Redis(host=self.Host, port=self.rPort)
-        self.db = client.FJqg
-        self.collection = self.db.qg
+        self.db = client.FJgy
+        self.collection = self.db.gy
 
     def login_and_cookies(self):
         """
@@ -91,7 +91,7 @@ class Crawl(object):
             for item in items:
                 url = item.get_attribute('href')
                 url_list.append(url)
-            # del url_list[0]
+            del url_list[0]
             # company_url_list = []
             # for url in url_list:
             #     company_url = url + "/contactusNews.aspx"
@@ -183,7 +183,7 @@ class Crawl(object):
             if info_dict is not None:
                 company = info_dict['company']
                 path = os.getcwd()
-                folder = path + "\\Image_QG"
+                folder = path + "\\Image_GY"
                 if not os.path.exists(folder):
                     os.mkdir(folder)
                 if contact_info_picture_url is not None:
