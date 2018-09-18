@@ -123,7 +123,7 @@ class Crawl(object):
             print(contant)
             # print("|================================================================================================================================|")
             company_contact_info = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li/img|//*[@class="contact"]/div/p/img|//*[@class="contact"]/p[1]/img').get_attribute('src')
-            print(company_contact_info)
+            # print(company_contact_info)
             # print(items)
             # print("|================================================================================================================================|")
             # print(contact_number_info)
