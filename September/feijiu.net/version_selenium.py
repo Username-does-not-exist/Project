@@ -223,6 +223,7 @@ class Crawl(object):
             if next_page_url is None:
                 print("抓取完成")
                 break
+            company_url_list, next_page_url = self.get_company_url(next_page_url)
 
 
 if __name__ == '__main__':
