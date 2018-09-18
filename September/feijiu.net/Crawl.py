@@ -163,7 +163,7 @@ class Crawl(object):
                 jar.set(cookie['name'], cookie['value'])
 
         proxies = {
-            "http": "http://" + IPool().get_proxy(),
+            "http": "http://" + IPool().get_proxy()
         }
 
         response = session.get(url, cookies=jar, proxies=proxies, timeout=5)

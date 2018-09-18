@@ -39,8 +39,16 @@ class Crawl(object):
         self.rPort = 6379
         client = MongoClient(host=self.Host, port=self.Port)
         self.rConn = redis.Redis(host=self.Host, port=self.rPort)
-        self.db = client.FJqg
-        self.collection = self.db.qg
+        self.db = client.FJgy
+        self.collection = self.db.gy
+
+    def construct_url(self):
+        start_url = "http://www.feijiu.net/gq/s/k%b7%cf%d6%bd/"
+        url_list = []
+        for i in range(3, 9):
+            url = start_url.format(i)
+            url_list.append(url)
+        return url_list
 
     def login_and_cookies(self):
         """
@@ -82,7 +90,7 @@ class Crawl(object):
             self.driver.implicitly_wait(2)
             # GY = self.driver.find_element_by_xpath('//*[@class="type"]/div/a[1]')
             # GY.click()
-            QG = self.driver.find_element_by_xpath('//*[@class="type"]/div/a[2]')
+            QG = self.driver.find_element_by_xpath('//*[@class="type"]/div/a[1]')
             QG.click()
             self.driver.implicitly_wait(2)
             items = self.driver.find_elements_by_xpath('//*[@class="pro_lists"]/div/div/h2/a')
@@ -183,7 +191,7 @@ class Crawl(object):
             if info_dict is not None:
                 company = info_dict['company']
                 path = os.getcwd()
-                folder = path + "\\Image_QG"
+                folder = path + "\\Image_GY"
                 if not os.path.exists(folder):
                     os.mkdir(folder)
                 if contact_info_picture_url is not None:
@@ -204,27 +212,22 @@ class Crawl(object):
         处理抓取逻辑
         :return:
         """
-        start_url = "http://www.feijiu.net/gq/s/k%b7%cf%d6%bd/"
         # 1.模拟登陆获取cookies保存到本地
         self.login_and_cookies()
         # 获取企业详情页的url
-        while True:
-            comapny_url_list, next_page_url = self.get_company_url(start_url)
+
+        url_list = self.construct_url()
+        for url in url_list:
+            comapny_url_list, next_page_url = self.get_company_url(url)
             for url in comapny_url_list:
                 try:
                     company_info, company_contact_info = self.get_contact_info(url)
                     company_dict = self.parse_data(company_info)
                     self.save_data(company_dict, company_contact_info)
                     # self.driver.back()
-
                 except Exception as e:
                     print(e)
                     pass
-            if next_page_url is None:
-                print("抓取完成")
-                break
-            else:
-                start_url = next_page_url
 
 
 if __name__ == '__main__':
