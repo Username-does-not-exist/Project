@@ -23,6 +23,7 @@ from requests.cookies import RequestsCookieJar
 import sys
 sys.path.append('../')
 from UserAgentPool import UAPool
+from ProxyPool import IPool
 
 
 class Crawl(object):
@@ -161,12 +162,12 @@ class Crawl(object):
             for cookie in cookies:
                 jar.set(cookie['name'], cookie['value'])
 
-        # proxies = {
-        #     "http": "http://" + IPool().get_proxy(),
-        # }
+        proxies = {
+            "http": "http://" + IPool().get_proxy(),
+        }
 
-        # response = session.get(url, cookies=jar, proxies=proxies)
-        response = session.get(url, cookies=jar)
+        response = session.get(url, cookies=jar, proxies=proxies, timeout=5)
+        # response = session.get(url, cookies=jar)
         page = response.text
         print("|=========================================================================================================|")
         # print(page)
