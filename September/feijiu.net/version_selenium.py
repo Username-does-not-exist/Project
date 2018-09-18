@@ -216,10 +216,11 @@ class Crawl(object):
                     company_dict = self.parse_data(company_info)
                     self.save_data(company_dict, company_contact_info)
                     # self.driver.back()
-                    start_url = next_page_url
+
                 except Exception as e:
                     print(e)
                     pass
+            start_url = next_page_url
             if next_page_url is None:
                 print("抓取完成")
                 break
