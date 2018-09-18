@@ -210,7 +210,6 @@ class Crawl(object):
         # 获取企业详情页的url
         comapny_url_list, next_page_url = self.get_company_url(self.start_url)
         while True:
-
             for url in comapny_url_list:
                 try:
                     company_info, company_contact_info = self.get_contact_info(url)
