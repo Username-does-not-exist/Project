@@ -220,10 +220,11 @@ class Crawl(object):
                 except Exception as e:
                     print(e)
                     pass
-            start_url = next_page_url
             if next_page_url is None:
                 print("抓取完成")
                 break
+            else:
+                start_url = next_page_url
 
 
 if __name__ == '__main__':
