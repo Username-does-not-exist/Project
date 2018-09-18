@@ -120,7 +120,7 @@ class Crawl(object):
             # self.driver.implicitly_wait(2)
             # print(self.driver.page_source)
             contant = self.driver.find_element_by_xpath('//*[@class="contact"]').text
-            print(contant)
+            # print(contant)
             # print("|================================================================================================================================|")
             company_contact_info = self.driver.find_element_by_xpath('//*[@class="contact"]/div/ul/li/img|//*[@class="contact"]/div/p/img|//*[@class="contact"]/p[1]/img').get_attribute('src')
             # print(company_contact_info)
