@@ -33,7 +33,7 @@ class Crawl(object):
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--headless')
         self.driver = webdriver.Chrome(chrome_options=chrome_options)
-        self.driver = webdriver.Chrome()
+        # self.driver = webdriver.Chrome()
         self.Host = "127.0.0.1"
         self.Port = 27017
         self.rPort = 6379
