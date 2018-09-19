@@ -2,7 +2,7 @@
 KEY_WORD = "服饰"
 
 # URL
-START_URL = "https://channel.jd.com/fashion.html"
+START_URL = ""
 LOGIN_URL = ""
 
 # DB

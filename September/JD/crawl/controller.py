@@ -1,3 +1,4 @@
+import time
 import redis
 from pymongo import MongoClient
 from selenium import webdriver
@@ -28,6 +29,11 @@ class Crawl(object):
         search.clear()
         search.send_keys(KEY_WORD)
         button.click()
+        time.sleep(2)
+        self.driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+        shop_elements = self.driver.find_elements_by_xpath('//*[@id="J_goodsList"]/ul/li/div/div[last()-1]/span/a')
+        for shop in shop_elements:
+            shop.click()
 
 
 if __name__ == '__main__':
