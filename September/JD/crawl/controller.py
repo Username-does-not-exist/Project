@@ -10,11 +10,26 @@ from cfg.config import *
 class Crawl(object):
 
     def __init__(self):
-        self.login_url = LOGIN_URL
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--headless')
         self.driver = webdriver.Chrome(chrome_options=chrome_options)
-        # self.driver = webdriver.Chrome()
-        self.client = MongoClient(host=Host, port=MPORT)
-        self.rConn = redis.Redis(host=Host, port=RPORT)
+        self.driver = webdriver.Chrome()
+        self.client = MongoClient(host=HOST, port=MPORT)
+        self.rConn = redis.Redis(host=HOST, port=RPORT)
 
+    def run(self):
+        """
+        处理主要业务逻辑
+        :return:
+        """
+        self.driver.get(START_URL)
+        search = self.driver.find_element_by_xpath('//*[@class="form"]/input')
+        button = self.driver.find_element_by_xpath('//*[@class="form"]/button')
+        search.clear()
+        search.send_keys(KEY_WORD)
+        button.click()
+
+
+if __name__ == '__main__':
+    crawl = Crawl()
+    crawl.run()

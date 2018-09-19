@@ -1,3 +1,6 @@
+# KEY_WORD
+KEY_WORD = "服饰"
+
 # URL
 START_URL = "https://channel.jd.com/fashion.html"
 LOGIN_URL = ""
