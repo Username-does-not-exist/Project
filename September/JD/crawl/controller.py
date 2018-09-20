@@ -60,7 +60,16 @@ class Crawl(object):
         conmmit_button = self.driver.find_element_by_xpath('//*[@class="btn"]')
         conmmit_button.click()
         shop_info = dict()
-        # TODO 提取信息并保存
+        shop_info['company'] = self.driver.find_element_by_xpath('//*[@class="jScore"]/ul/li[3]/span').text
+        shop_info['rgs_number'] = self.driver.find_element_by_xpath('//*[@class="jScore"]/ul/li[4]/span').text
+        shop_info['legal_representative'] = self.driver.find_element_by_xpath('//*[@class="jScore"]/ul/li[5]/span').text
+        shop_info['rgs_address'] = self.driver.find_element_by_xpath('//*[@class="jScore"]/ul/li[6]/span').text
+        shop_info['rgs_capital'] = self.driver.find_element_by_xpath('//*[@class="jScore"]/ul/li[7]/span').text
+        shop_info['valid_period'] = self.driver.find_element_by_xpath('//*[@class="jScore"]/ul/li[8]/span').text
+        shop_info['business_scope'] = self.driver.find_element_by_xpath('//*[@class="jScore"]/ul/li[9]/span').text
+        shop_info['address'] = self.driver.find_element_by_xpath('//*[@class="jScore"]/ul/li[10]/span').text
+        shop_info['shop'] = self.driver.find_element_by_xpath('//*[@class="jScore"]/ul/li[11]/span').text
+        shop_info['shop_url'] = self.driver.find_element_by_xpath('//*[@class="jScore"]/ul/li[12]/span').text
         return shop_info
 
     def run(self):
