@@ -59,7 +59,10 @@ class Crawl(object):
         code_input_element.send_keys(verify_code)
         conmmit_button = self.driver.find_element_by_xpath('//*[@class="btn"]')
         conmmit_button.click()
+        shop_info = dict()
         # TODO 提取信息并保存
+        return shop_info
+
     def run(self):
         """
         处理主要业务逻辑
@@ -84,7 +87,7 @@ class Crawl(object):
                 verify_code_url = self.get_verify_code_url(license_url)
                 verify_code = self.get_verify_code(verify_code_url)
                 shopinfo = self.get_shop_info(license_url, verify_code)
-                save_shop_info(shop)
+                save_shop_info(shopinfo)
             next_page_element = self.driver.find_element_by_xpath('//*[@class="p-num"]/a[last()]')
             if next_page_element.text == "下一页>":
                 next_page_element.click()

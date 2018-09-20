@@ -25,5 +25,5 @@ def translate_verify_code(username, password, appId, appKey, filename, codetype,
     return id, result.value
 
 
-id, code = verify_code(username, password, appId, appKey, filename, codetype, timeout)
+id, code = translate_verify_code(username, password, appId, appKey, filename, codetype, timeout)
 print("识别结果为{}".format(code.decode('utf-8')))
