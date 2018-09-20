@@ -6,6 +6,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.dirname(os.getcwd())))
 from cfg.config import *
+from pool.ProxyPool import IPool
 
 
 class Crawl(object):
@@ -13,6 +14,7 @@ class Crawl(object):
     def __init__(self):
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--proxy-server=http://{}'.format(IPool().get_proxy()))
         self.driver = webdriver.Chrome(chrome_options=chrome_options)
         self.driver = webdriver.Chrome()
         self.client = MongoClient(host=HOST, port=MPORT)
