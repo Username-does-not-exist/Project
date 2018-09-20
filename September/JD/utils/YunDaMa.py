@@ -17,7 +17,7 @@ timeout = 5
 filename = b'create.jpg'
 
 
-def verify_code(username, password, appId, appKey, filename, codetype, timeout):
+def translate_verify_code(username, password, appId, appKey, filename, codetype, timeout):
     print('\r\n>>>正在一键识别...')
     result = c_char_p(b"                              ")
     id = YDMApi.YDM_EasyDecodeByPath(username, password, appId, appKey, filename, codetype, timeout, result)
