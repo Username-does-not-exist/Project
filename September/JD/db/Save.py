@@ -13,3 +13,14 @@ def save_shop_info(item):
         col = db.shop
         col.insert(item)
 
+
+def save_shop_url(url):
+    if url is not None:
+        conn = redis.Redis(host=HOST, port=RPORT)
+        conn.hset('jd-shop-urls', url, 0)
+
+
+def get_shop_url_list():
+    conn = redis.Redis(host=HOST, port=RPORT)
+    url_list = conn.hgetall('jd-shop-urls')
+    return url_list

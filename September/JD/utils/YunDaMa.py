@@ -20,10 +20,12 @@ filename = b'create.jpg'
 def translate_verify_code(username, password, appId, appKey, filename, codetype, timeout):
     print('\r\n>>>正在一键识别...')
     result = c_char_p(b"                              ")
-    id = YDMApi.YDM_EasyDecodeByPath(username, password, appId, appKey, filename, codetype, timeout, result)
+    code = result.value.decode("utf-8")
+    # id = YDMApi.YDM_EasyDecodeByPath(username, password, appId, appKey, filename, codetype, timeout, result)
+    id = YDMApi.YDM_EasyDecodeByBytes(appId, appKey)
     # 分配30个字节存放识别结果
-    return id, result.value
+    return id, code
 
 
 id, code = translate_verify_code(username, password, appId, appKey, filename, codetype, timeout)
-print("识别结果为{}".format(code.decode('utf-8')))
+print("识别结果为{}".format(code))
