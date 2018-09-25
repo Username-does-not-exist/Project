@@ -29,7 +29,7 @@ def decode_verify_code(username, password, appId, appKey, filename, codetype, ti
     print('\r\n>>>正在一键识别...')
     # 分配30个字节存放识别结果
     result = c_char_p(b"                              ")
-    id = YDMApi.YDM_EasyDecodeByBytes(username, password, appId, appKey, filename, codetype, timeout, result)
+    id = YDMApi.YDM_EasyDecodeByPath(username, password, appId, appKey, filename, codetype, timeout, result)
     # id = YDMApi.YDM_EasyDecodeByBytes(appId, appKey)
     code = result.value.decode('utf-8')
     return id, code
@@ -100,17 +100,20 @@ class CrawlINFO(object):
         self.driver.get(shop_url)
         self.driver.implicitly_wait(2)
         license_url = self.driver.find_element_by_xpath('//*[@class="shopTolal"]/li[2]/a').get_attribute('href')
-        return license_url
+        shop = self.driver.find_element_by_xpath('//*[@class="jLogo"]/a').text
+        print("-----------------------------")
+        print(shop)
+        print("-----------------------------")
+        return license_url, shop
 
     def get_verify_code_url(self, license_url):
         # 营业执照信息所在页面
         self.driver.get(license_url)
         self.driver.implicitly_wait(2)
         verify_code_url = self.driver.find_element_by_xpath('//*[@class="verify"]/img').get_attribute('src')
-        print(verify_code_url)
         return verify_code_url
 
-    def parse_verify_code(self, verify_code_url):
+    def parse_verify_code(self, verify_code_url, shop):
         # 创建用于存储验证码图片的文件夹
         path = os.path.abspath(os.path.dirname(os.getcwd()))
         folder = path + "\\captcha"
@@ -118,12 +121,15 @@ class CrawlINFO(object):
             os.mkdir(folder)
         # 获取验证码图片字节流
         response = requests.get(verify_code_url)
-        contant = response.content
-        # image = Image.open(BytesIO(response.content))
-        # 使用第三方打码平台进行验证码识别
-        id, verify_code = decode_verify_code(username, password, appId, appKey, contant, codetype, timeout)
         # 保存验证码图片
-        # image.save(folder + '/{}.jpg'.format(shop_info['shop']))
+        image = Image.open(BytesIO(response.content))
+        image.save(folder + '/{}.jpg'.format(shop))
+        # 使用第三方打码平台进行验证码识别
+        filename = '{}.jpg'.format(shop)
+        content = filename.encode('utf-8')
+        id, verify_code = decode_verify_code(username, password, appId, appKey, content, codetype, timeout)
+
+        print(verify_code)
         return verify_code
 
     def parse_data(self, verify_code):
@@ -155,9 +161,10 @@ if __name__ == '__main__':
     url_list = get_shop_url_list()
     for url in url_list:
         shop_url = url.decode('utf-8')
-        license_url = info.get_license_url(shop_url)
-        verify_code_url = info.get_license_url(license_url)
-        verify_code = info.parse_verify_code(verify_code_url)
+        license_url, shop = info.get_license_url(shop_url)
+        verify_code_url = info.get_verify_code_url(license_url)
+        print(verify_code_url, shop)
+        verify_code = info.parse_verify_code(verify_code_url, shop)
         print(verify_code)
         # shop_info = info.parse_data(verify_code)
         # save_shop_info(shop_info)
