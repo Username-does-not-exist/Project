@@ -404,12 +404,17 @@
 #
 #
 # print(worksheet)
+#
+# import xlsxwriter
+#
+# workbook = xlsxwriter.Workbook('hello.xlsx')
+# worksheet = workbook.add_worksheet('test')
+# worksheet.write('A1', 'Hello, world')
+# workbook.close()
+#
+# print(worksheet)
+# A = """连衣裙,毛呢大衣,针织衫,羽绒,马甲,卫衣,打底衫,短外套,长袖连衣裙,连衣裙套装,针织连衣裙,蕾丝连衣裙,背带裙,雪纺连衣裙,一字肩连衣裙,针织开衫套头衫,高领毛衣,宽松毛衣,中长款羊毛衫,羊绒衫,打底衫,长袖衬衫,长袖T恤,长袖打底衫,蕾丝打底衫,加绒打底衫,加绒衬衫,毛呢大衣,轻薄羽绒服,牛仔外套,毛衣外套,中长款风衣,西装外套,PU皮衣"""
+# # #
+# # # B = A.split(',')
+# # # print(B)
 
-import xlsxwriter
-
-workbook = xlsxwriter.Workbook('hello.xlsx')
-worksheet = workbook.add_worksheet('test')
-worksheet.write('A1', 'Hello, world')
-workbook.close()
-
-print(worksheet)
