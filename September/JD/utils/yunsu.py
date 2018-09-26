@@ -4,16 +4,19 @@
 import sys, hashlib, os, random, urllib, urllib2
 from datetime import *
 
+
 class APIClient(object):
+
     def http_request(self, url, paramDict):
         post_content = ''
         for key in paramDict:
-            post_content = post_content + '%s=%s&'%(key,paramDict[key])
+            post_content = post_content + '%s=%s&'%(key, paramDict[key])
         post_content = post_content[0:-1]
-        #print post_content
+
+        # print post_content
         req = urllib2.Request(url, data=post_content)
         req.add_header('Content-Type', 'application/x-www-form-urlencoded')
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())  
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())
         response = opener.open(req, post_content)  
         return response.read()
 
@@ -26,7 +29,8 @@ class APIClient(object):
         for key in paramKeys:
             bs = bs + boundarystr.encode('ascii')
             param = "Content-Disposition: form-data; name=\"%s\"\r\n\r\n%s"%(key, paramDict[key])
-            #print param
+
+            # print param
             bs = bs + param.encode('utf8')
         bs = bs + boundarystr.encode('ascii')
         
@@ -53,7 +57,7 @@ def arguments_to_dict(args):
     
     count = len(args)
     if count <= 1:
-        print('exit:need arguments.'
+        print('exit:need arguments.')
         return argDict
     
     for i in [1,count-1]:
@@ -69,10 +73,11 @@ def arguments_to_dict(args):
 if __name__ == '__main__':
     client = APIClient()
     while 1:
+
         paramDict = {}
         result = ''
         act = input('Action:')
-        if cmp(act, 'info') == 0: 
+        if cmp(act, 'info') == 0:
             paramDict['username'] = input('username:')
             paramDict['password'] = input('password:')
             result = client.http_request('http://api.ysdm.net/info.xml', paramDict)
@@ -104,7 +109,7 @@ if __name__ == '__main__':
             paramDict['password'] = input('password:')
             paramDict['id'] = input('id:')
             result = client.http_request('http://api.ysdm.net/create.xml', paramDict)
-            
+
         elif cmp(act, 'upload') == 0:
             paramDict['username'] = input('username:')
             paramDict['password'] = input('password:')
@@ -112,13 +117,7 @@ if __name__ == '__main__':
             paramDict['timeout'] = input('timeout:')
             paramDict['softid'] = input('softid:')
             paramDict['softkey'] = input('softkey:')
-            paramKeys = ['username',
-                 'password',
-                 'typeid',
-                 'timeout',
-                 'softid',
-                 'softkey'
-                ]
+            paramKeys = ['username', 'password', 'typeid', 'timeout', 'softid', 'softkey']
             import Image
             imagePath = input('Image Path:')
             img = Image.open(imagePath)
@@ -141,4 +140,4 @@ if __name__ == '__main__':
         elif cmp(act, 'exit') == 0:
             break
         
-        print (result)
+        print(result)
