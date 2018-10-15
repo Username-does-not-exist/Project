@@ -55,26 +55,26 @@ def get_distance(image):
 
 
 def get_tracks(distance):
-    # 先滑过一点，最后再反着滑动回来
-    v = 0
-    t = 0.2
-    forward_tracks = []
+    # 移动轨迹
+    import random
 
-    current = 0
-    mid = distance * 1 / 2
-    while current < distance:
-        if current < mid:
-            a = 2
-        else:
-            a = -2
-
-        s = v * t + 0.5 * a * (t ** 2)
-        v = v + a * t
-        current += s
-        forward_tracks.append(round(s))
-    # 反着滑动到准确位置
-    back_tracks = [-3, -3, -2, -2, -2, -2, -2, -1, -1, -1]  # 总共等于-20
-    return {'forward_tracks': forward_tracks, 'back_tracks': back_tracks}
+    distance = 130
+    track = []
+    n = 0
+    while True:
+        m = random.randint(0, 5)
+        track.append(m)
+        n += m
+        if n >= distance:
+            break
+    if n == distance:
+        return track
+    else:
+        de_distance = n - distance
+        l = len(track)
+        last = l - 1
+        track[last] = de_distance
+        return track
 
 
 def crack(driver):  # 破解滑动认证
@@ -94,13 +94,13 @@ def crack(driver):  # 破解滑动认证
     ActionChains(driver).click_and_hold(button).perform()
 
     # 5.正常人类总是自信满满地开始正向滑动，自信地表现是疯狂加速
-    for track in tracks['forward_tracks']:
+    for track in tracks:
         ActionChains(driver).move_by_offset(xoffset=track, yoffset=0).perform()
 
     # 6,结果傻逼了，正常的人类停顿了一下，回过神来发现，卧槽，滑过了,然后开始反向滑动
-    time.sleep(0.5)
-    for back_track in tracks['back_tracks']:
-        ActionChains(driver).move_by_offset(xoffset=back_track, yoffset=0).perform()
+    # time.sleep(0.5)
+    # for back_track in tracks['back_tracks']:
+    #     ActionChains(driver).move_by_offset(xoffset=back_track, yoffset=0).perform()
 
     # 7.小范围震荡一下，进一步迷惑极验后台，这一步可以极大地提高成功率
     ActionChains(driver).move_by_offset(xoffset=-3, yoffset=0).perform()
