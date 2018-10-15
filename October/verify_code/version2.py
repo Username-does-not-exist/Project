@@ -1,5 +1,4 @@
 import os
-
 from selenium import webdriver
 from selenium.webdriver import ActionChains
 from PIL import Image
@@ -57,8 +56,6 @@ def get_distance(image):
 def get_tracks(distance):
     # 移动轨迹
     import random
-
-    distance = 130
     track = []
     n = 0
     while True:
@@ -87,7 +84,6 @@ def crack(driver):  # 破解滑动认证
 
     # 3、模拟人的行为习惯，根据总位移得到行为轨迹
     tracks = get_tracks(distance)
-    print(tracks)
 
     # 4、按照行动轨迹先正向滑动，后反滑动
     button = driver.find_element_by_xpath('//*[@class="JDJRV-slide-left"]')
@@ -136,14 +132,14 @@ def login_cnblogs(username, password):
         time.sleep(2)
         # 2、破解滑动认证
         crack(driver)
-        time.sleep(10)  # 睡时间长一点，确定登录成功
         path = os.path.abspath(os.getcwd())
         file = path + "\\full_snap.png"
         if os.path.exists(file):
             os.remove(file)
+        time.sleep(10)  # 睡时间长一点，确定登录成功
     finally:
         pass
-        # driver.close()
+        driver.quit()
 
 
 if __name__ == '__main__':
