@@ -10,7 +10,7 @@ def get_captcha():
     # 获取验证码图片上每一个像素点的RGB值
     path = os.path.abspath(os.getcwd())
     folder = path + "\\captcha"
-    image = Image.open(folder + '\\background07.png', )
+    image = Image.open(folder + '\\background04.png', )
     pix = image.load()
 
     width = image.size[0]
@@ -29,11 +29,21 @@ def get_captcha():
     L = len(r_list)
     i = 0
     while i <= L:
-        if r_list[i] > 2.5 * r_list[i + 1] and g_list[i] > 2.5 * g_list[i + 1] or b_list[i] > 2.5 * b_list[i + 1]:
+        R1 = r_list[i] + r_list[i+1] + r_list[i+2] + r_list[i+3] + r_list[i+4] + r_list[i+5] + r_list[i+6] + r_list[i+7]
+        R2 = r_list[i+8] + r_list[i+9] + r_list[i+10] + r_list[i+11] + r_list[i+12] + r_list[i+13] + r_list[i+14] + r_list[i+15]
+
+        G1 = g_list[i] + g_list[i+1] + g_list[i+2] + g_list[i+3] + g_list[i+4] + g_list[i+5] + g_list[i+6] + g_list[i+7]
+        G2 = g_list[i+8] + g_list[i+9] + g_list[i+10] + g_list[i+11] + g_list[i+12] + g_list[i+13] + g_list[i+14] + g_list[i+15]
+
+        B1 = b_list[i] + b_list[i+1] + b_list[i+2] + b_list[i+3] + b_list[i+4] + b_list[i+5] + b_list[i+6] + b_list[i+7]
+        B2 = b_list[i+8] + b_list[i+9] + b_list[i+10] + b_list[i+11] + b_list[i+12] + b_list[i+13] + b_list[i+14] + b_list[i+15]
+
+        if R1 > 2.5 * R2 and G1 > 2.5 * G2 and B1 > 2.5 * B2:
             distance = int(i / height)
-            print(distance)
             return distance
         i += 1
+
+    # if r_list[i] > 2.5 * r_list[i + 1] and g_list[i] > 2.5 * g_list[i + 1] or b_list[i] > 2.5 * b_list[i + 1]:
 
     # for x in range(width):
     #     for y in range(height):
@@ -55,8 +65,8 @@ def get_captcha():
     #     line = li[i]
     #     print("----{}----".format(i))
     #     print(line)
-        # for j in line:
-        #     print(j)
+    # for j in line:
+    #     print(j)
     # L = len(r_list)
     # i = 0
     # while i <= L:
