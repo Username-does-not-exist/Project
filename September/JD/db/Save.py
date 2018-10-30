@@ -17,7 +17,7 @@ def save_shop_info(item):
 def save_shop_url(url):
     if url is not None:
         conn = redis.Redis(host=HOST, port=RPORT)
-        conn.hset('jd-shop-urls', url, 0)
+        conn.hset(redis_col_name, url, 0)
 
 
 def get_shop_url_list():
