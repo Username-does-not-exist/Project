@@ -1,5 +1,7 @@
 from selenium import webdriver
+import random
 import sys
+import time
 import os
 sys.path.append(os.path.abspath(os.path.dirname(os.getcwd())))
 from cfg.config import *
@@ -12,14 +14,18 @@ class UrlSpider(object):
         self.driver = webdriver.Chrome()
 
     def get_shop_url(self):
+        self.driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+        sleep_time = random.randint(3, 5)
+        time.sleep(sleep_time)
         items = self.driver.find_elements_by_xpath('//*[@id="J_goodsList"]/ul/li/div/div/span/a')
-        next_page_button = self.driver.find_element('//*[@class="pn-next"')
+        next_page_button = self.driver.find_element_by_xpath('//*[@class="pn-next"]')
         url_list = []
         for item in items:
             url_list.append(item.get_attribute('href'))
         return url_list, next_page_button
 
     def save_url(self, url_list):
+        print("当前页面抓取到的url个数为：{}".format(len(url_list)))
         if len(url_list) > 0:
             for url in url_list:
                 save_shop_url(url)
@@ -37,12 +43,15 @@ class UrlSpider(object):
             search_button.click()
             self.driver.implicitly_wait(5)
             while True:
-                url_list, next_page_button = self.get_shop_url()
-                self.save_url(url_list)
-                if next_page_button is not None:
-                    next_page_button.click()
-                    self.driver.implicitly_wait(5)
-                break
+                try:
+                    url_list, next_page_button = self.get_shop_url()
+                    self.save_url(url_list)
+                    if next_page_button is not None:
+                        next_page_button.click()
+                        self.driver.implicitly_wait(5)
+                except Exception as e:
+                    print(e)
+                    break
 
 
 if __name__ == '__main__':
