@@ -138,7 +138,7 @@ if __name__ == '__main__':
             verify_code = http_upload_image(PostUrl, paramKeys, post_content, verify_code_bytes)
             shop_info = info.parse_data(verify_code)
             save_shop_info(shop_info)
-            delURL('jd-shop-urls', url)
+            delURL('jd_sm_shop_urls', url)
         except Exception as e:
             print(e)
             print(shop_url)

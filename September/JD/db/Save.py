@@ -9,8 +9,8 @@ from cfg.config import *
 def save_shop_info(item):
     if item is not None:
         client = MongoClient(host=HOST, port=MPORT)
-        db = client.JD
-        col = db.shop
+        db = client.JDsm
+        col = db.shopsm
         col.insert(item)
 
 
@@ -22,5 +22,5 @@ def save_shop_url(url):
 
 def get_shop_url_list():
     conn = redis.Redis(host=HOST, port=RPORT)
-    url_list = conn.hgetall('jd-shop-urls')
+    url_list = conn.hgetall('jd_sm_shop_urls')
     return url_list
