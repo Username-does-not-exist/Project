@@ -139,7 +139,6 @@ if __name__ == '__main__':
             shop_info = info.parse_data(verify_code)
             save_shop_info(shop_info)
             delURL('jd_sm_shop_urls', url)
-        except Exception as e:
-            print(e)
+        except:
             print(shop_url)
             pass
